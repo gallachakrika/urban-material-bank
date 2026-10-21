@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123d32">
+<title>UMB Circular Intelligence</title>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--green:#123d32;--green2:#1e6a53;--mint:#dff4e9;--lime:#c6e86b;--cream:#f7f7f1;--ink:#1c2924;--muted:#68766f;--line:#dce5dd;--white:#fff;--orange:#f4a261;--shadow:0 12px 35px rgba(19,61,50,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.topbar{position:sticky;top:0;z-index:20;background:rgba(247,247,241,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{max-width:1200px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.04em;color:var(--green);font-size:1.18rem}.brandmark{width:38px;height:38px;border-radius:13px;background:var(--green);color:var(--lime);display:grid;place-items:center;font-weight:900}
+.navlinks{display:flex;gap:5px;flex-wrap:wrap}.navlinks button{border:0;background:transparent;color:var(--muted);padding:9px 12px;border-radius:10px;font-weight:650}.navlinks button:hover,.navlinks button.active{background:var(--mint);color:var(--green)}
+.demo-pill{font-size:.72rem;letter-spacing:.06em;font-weight:850;background:#fff0d8;color:#875018;border:1px solid #f1d6a9;padding:6px 9px;border-radius:999px;white-space:nowrap}
+main{max-width:1200px;margin:auto;padding:28px 22px 70px}.view{display:none}.view.active{display:block}.hero{position:relative;overflow:hidden;border-radius:28px;background:var(--green);color:white;padding:clamp(28px,5vw,64px);display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center;min-height:360px}
+.hero:after{content:"";position:absolute;width:340px;height:340px;border:1px solid rgba(198,232,107,.3);border-radius:50%;right:-70px;top:-100px;box-shadow:0 0 0 35px rgba(198,232,107,.05),0 0 0 75px rgba(198,232,107,.04)}
+.eyebrow{font-size:.78rem;text-transform:uppercase;letter-spacing:.13em;font-weight:850;color:var(--lime)}h1{font-size:clamp(2.3rem,5vw,4.2rem);line-height:1.02;letter-spacing:-.055em;margin:14px 0 18px;max-width:700px}h2{font-size:clamp(1.55rem,3vw,2.2rem);letter-spacing:-.04em;margin:0 0 8px}h3{margin:0 0 8px;letter-spacing:-.02em}.hero p{max-width:570px;color:#d9e8df;font-size:1.05rem}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn-primary{background:var(--lime);color:var(--green)}.btn-light{background:white;color:var(--green)}.btn-outline{background:transparent;border:1px solid var(--line);color:var(--green)}.btn-dark{background:var(--green);color:white}.btn-small{padding:8px 11px;font-size:.87rem;border-radius:9px}.hero-art{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:330px;margin:auto}.art-tile{aspect-ratio:1;border-radius:24px;padding:17px;display:flex;flex-direction:column;justify-content:space-between;color:var(--green);font-weight:850}.art-tile span:first-child{font-size:2.3rem}.art-tile:nth-child(1){background:var(--lime)}.art-tile:nth-child(2){background:#e7c7a5;margin-top:24px}.art-tile:nth-child(3){background:#d5e8df;margin-top:-24px}.art-tile:nth-child(4){background:#fff}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}.stat,.panel,.card{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.stat{padding:18px}.stat .num{font-size:1.8rem;letter-spacing:-.05em;font-weight:900;color:var(--green)}.muted{color:var(--muted)}.small{font-size:.86rem}.section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:34px 0 16px}.section-head p{margin:0;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{padding:18px;display:flex;flex-direction:column;gap:11px;min-width:0}.material-icon{height:120px;border-radius:14px;background:linear-gradient(135deg,#e1f1e6,#f3f0d9);display:grid;place-items:center;font-size:3.1rem}.card-top{display:flex;justify-content:space-between;gap:8px;align-items:start}.tag{font-size:.72rem;font-weight:850;border-radius:999px;padding:5px 8px;background:var(--mint);color:var(--green);white-space:nowrap}.tag.limited{background:#fff0d8;color:#875018}.price{font-size:1.35rem;font-weight:900;color:var(--green)}.card-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}.toolbar{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:10px;margin:18px 0}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}.field label{font-weight:750;font-size:.9rem}.field input,.field select,.field textarea,.search-input{width:100%;border:1px solid #cfdad1;border-radius:11px;background:white;padding:11px 12px;color:var(--ink);outline:none}.field input:focus,.field select:focus,.field textarea:focus,.search-input:focus{border-color:var(--green2);box-shadow:0 0 0 3px rgba(30,106,83,.12)}.field textarea{min-height:95px;resize:vertical}.panel{padding:22px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}.chat-layout{display:grid;grid-template-columns:.75fr 1.25fr;gap:18px;align-items:stretch}.chat-intro{background:var(--green);color:white;border-radius:20px;padding:24px}.chat-intro p{color:#d9e8df}.suggestions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.suggestion{border:1px solid rgba(255,255,255,.3);color:white;background:rgba(255,255,255,.08);border-radius:999px;padding:8px 11px;text-align:left;font-size:.84rem}.chat-box{background:white;border:1px solid var(--line);border-radius:20px;display:flex;flex-direction:column;min-height:530px;overflow:hidden}.chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}.avatar{width:38px;height:38px;background:var(--mint);color:var(--green);display:grid;place-items:center;border-radius:13px;font-weight:900}.chat-head .status{font-size:.78rem;color:#287c55}.messages{padding:18px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;max-height:470px}.message{max-width:90%;padding:12px 14px;border-radius:15px;white-space:pre-wrap;font-size:.92rem}.message.bot{background:#f0f5ef;align-self:flex-start;border-bottom-left-radius:4px}.message.user{background:var(--green);color:white;align-self:flex-end;border-bottom-right-radius:4px}.chat-form{display:flex;gap:8px;padding:13px;border-top:1px solid var(--line)}.chat-form input{flex:1;min-width:0;border:1px solid var(--line);border-radius:11px;padding:12px}.listing-result{border:1px solid var(--line);background:white;padding:12px;border-radius:12px;margin-top:10px}.listing-result strong{color:var(--green)}.notice{background:#fff5df;border:1px solid #f0dfb6;color:#72551e;padding:12px 14px;border-radius:12px;font-size:.87rem}.success{background:#e7f6eb;border:1px solid #c7e7d0;color:#205e3b;padding:12px 14px;border-radius:12px;font-size:.9rem}.impact-hero{background:var(--mint);padding:28px;border-radius:20px;display:flex;align-items:center;justify-content:space-between;gap:18px}.impact-big{font-size:clamp(2.4rem,5vw,4rem);font-weight:950;letter-spacing:-.06em;color:var(--green)}.bar-list{display:grid;gap:13px;margin-top:18px}.bar-row{display:grid;grid-template-columns:120px 1fr 55px;align-items:center;gap:10px;font-size:.88rem}.bar{height:10px;background:#e6eee7;border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:var(--green2);border-radius:999px}.footer{border-top:1px solid var(--line);padding:24px 22px;color:var(--muted);font-size:.85rem;text-align:center}.empty{padding:28px;text-align:center;color:var(--muted);background:white;border:1px dashed var(--line);border-radius:14px}.hidden{display:none!important}.pill-row{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#edf4ee;border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:700;color:var(--green)}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:540px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:.9rem}th{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-art{display:none}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.chat-layout{grid-template-columns:1fr}.chat-intro{padding:18px}.chat-box{min-height:470px}.toolbar{grid-template-columns:1fr 1fr}.two-col{grid-template-columns:1fr}}
+@media(max-width:580px){.nav{align-items:flex-start;flex-wrap:wrap}.navlinks{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap}.navlinks button{white-space:nowrap}.demo-pill{margin-left:auto}main{padding:18px 13px 50px}.hero{padding:26px 21px;border-radius:20px}.stats{gap:9px}.stat{padding:13px}.stat .num{font-size:1.5rem}.grid{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr 1fr}.toolbar .search-span{grid-column:1/-1}.section-head{align-items:start;flex-direction:column}.impact-hero{align-items:start;flex-direction:column}.bar-row{grid-template-columns:95px 1fr 40px}.chat-box{min-height:490px}.message{max-width:96%}}
+
+#warehouseMap {
+  width: 100%;
+  height: 460px;
+  border-radius: 14px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+#map .panel {
+  padding: 12px;
+}
+
+.warehouse-card {
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.warehouse-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--green2);
+}
+
+.warehouse-card .hub-icon {
+  font-size: 2rem;
+  background: var(--mint);
+  border-radius: 12px;
+  padding: 12px;
+  width: fit-content;
+}
+
+.map-filter-area {
+  margin-bottom: 18px;
+}
+
+.map-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.map-filter {
+  border: 1px solid var(--line);
+  background: #f7faf6;
+  color: var(--green);
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-size: .85rem;
+  font-weight: 750;
+  transition: all .2s ease;
+}
+
+.map-filter:hover {
+  transform: translateY(-2px);
+  border-color: var(--green2);
+}
+
+.map-filter.active {
+  background: var(--green);
+  color: white;
+  border-color: var(--green);
+  box-shadow: 0 4px 12px rgba(18, 61, 50, .18);
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 4px 4px;
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+.map-legend span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.green-dot { background: #22966e; }
+.orange-dot { background: #ed9144; }
+.blue-dot { background: #468bd0; }
+
+#warehouseMap {
+  min-height: 460px;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.warehouse-marker {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 3px solid white;
+  border-radius: 50% 50% 50% 8px;
+  transform: rotate(-45deg);
+  box-shadow: 0 3px 12px #163b303b;
+}
+
+.warehouse-marker span {
+  transform: rotate(45deg);
+  font-size: 17px;
+}
+
+.hub-popup h3 {
+  color: #123d32;
+  margin-bottom: 6px;
+}
+
+.hub-popup p {
+  margin: 5px 0;
+}
+
+.hub-popup .popup-tag {
+  display: inline-block;
+  background: #e4f4e9;
+  color: #15553e;
+  padding: 4px 8px;
+  margin: 3px 3px 0 0;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.warehouse-card.selected-hub {
+  border: 2px solid var(--green2);
+  box-shadow: 0 0 0 3px rgba(0, 180, 120, 0.18);
+  transform: translateY(-3px);
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="nav">
+    <div class="brand"><div class="brandmark">UMB</div><span>circular intelligence</span></div>
+    <nav class="navlinks" aria-label="Main navigation">
+      <button class="active" data-view="home">Home</button>
+      <button data-view="market">Explore materials</button>
+      <button data-view="mitra">UMB Mitra</button>
+      <button data-view="map">Bengaluru Map</button>
+      <button data-view="materialMatcher">Find My Materials</button>
+      <button data-view="rescue">Material rescue</button>
+      <button data-view="impact">Impact dashboard</button>
+    </nav>
+    <span class="demo-pill">● DEMO DATA</span>
+  </div>
+</header>
+<main>
+  <section class="view active" id="home">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">A smarter circular construction economy</div>
+        <h1>Give building materials a second life.</h1>
+        <p>Discover reclaimed materials, match them to your next project, and make reuse a practical first choice — not an afterthought.</p>
+        <div class="actions">
+          <button class="btn btn-primary" data-go="market">Explore materials ↗</button>
+          <button class="btn btn-light" data-go="mitra">Ask UMB Mitra ✳</button>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-tile"><span>▦</span><span>RECLAIM<br>BRICKS</span></div>
+        <div class="art-tile"><span>⌂</span><span>REUSE<br>TIMBER</span></div>
+        <div class="art-tile"><span>♻</span><span>RECOVER<br>VALUE</span></div>
+        <div class="art-tile"><span>↗</span><span>BUILD<br>BETTER</span></div>
+      </div>
+    </div>
+    <div class="stats" id="homeStats"></div>
+    <div class="section-head"><div><h2>Featured materials</h2><p>Sample inventory for the Bengaluru demo.</p></div><button class="btn btn-outline" data-go="market">View all materials →</button></div>
+    <div class="grid" id="featuredGrid"></div>
+    <div class="section-head"><div><h2>How UMB works</h2><p>A simple path from leftover materials to their next use.</p></div></div>
+    <div class="grid">
+      <article class="card"><div class="material-icon">♻️</div><h3>01 · Recover</h3><p class="muted">Identify reusable materials during renovation or demolition.</p></article>
+      <article class="card"><div class="material-icon">✓</div><h3>02 · Verify</h3><p class="muted">Confirm quantity, dimensions, condition and suitability before listing.</p></article>
+      <article class="card"><div class="material-icon">⌕</div><h3>03 · Match</h3><p class="muted">Help buyers discover relevant materials for their projects.</p></article>
+    </div>
+    <p class="notice" style="margin-top:20px">Prototype notice: listings, prices, suppliers and quantities are simulated. This website does not represent live inventory or verified environmental savings.</p>
+  </section>
+
+  <section class="view" id="market">
+    <div class="section-head"><div><div class="eyebrow" style="color:var(--green2)">Marketplace</div><h2>Explore reclaimed materials</h2><p>Search, filter and compare sample listings.</p></div><button class="btn btn-dark" data-go="mitra">Ask Mitra to find something</button></div>
+    <div class="toolbar">
+      <input id="searchInput" class="search-input search-span" placeholder="Search bricks, doors, timber..." aria-label="Search materials">
+      <select id="categoryFilter" class="search-input" aria-label="Filter category"><option value="">All categories</option></select>
+      <select id="conditionFilter" class="search-input" aria-label="Filter condition"><option value="">Any condition</option></select>
+      <select id="sortFilter" class="search-input" aria-label="Sort listings"><option value="featured">Featured first</option><option value="priceAsc">Price: low to high</option><option value="priceDesc">Price: high to low</option><option value="quantityDesc">Quantity: high to low</option></select>
+    </div>
+    <div class="grid" id="materialGrid"></div>
+    <p class="muted small" id="resultCount" style="margin-top:14px"></p>
+  </section>
+
+  <section class="view" id="mitra">
+    <div class="section-head"><div><div class="eyebrow" style="color:var(--green2)">Your circular construction assistant</div><h2>Meet UMB Mitra</h2><p>Tell Mitra what you need. It searches the sample inventory and explains the match.</p></div></div>
+    <div class="chat-layout">
+      <aside class="chat-intro">
+        <div class="eyebrow">Your material co-pilot</div><h2 style="margin-top:12px">Less searching. Smarter reuse.</h2>
+        <p>Mitra is a rule-based demo assistant. It uses the same material records shown in the marketplace, so it won't invent supplier listings.</p>
+        <h3 style="margin-top:22px">Try asking</h3>
+        <div class="suggestions">
+          <button class="suggestion" data-prompt="Find cheap bricks">Find cheap bricks</button>
+          <button class="suggestion" data-prompt="I need teak doors">Find teak doors</button>
+          <button class="suggestion" data-prompt="Compare tiles and granite">Compare tiles and granite</button>
+          <button class="suggestion" data-prompt="I need 2000 bricks">Check 2,000 bricks</button>
+          <button class="suggestion" data-prompt="I have materials from demolition">Material rescue</button>
+          <button class="suggestion" data-prompt="How does UMB help sustainability?">How does UMB help?</button>
+        </div>
+      </aside>
+      <div class="chat-box">
+        <div class="chat-head"><div class="avatar">M</div><div><strong>UMB Mitra</strong><div class="status">● Demo assistant · inventory connected</div></div><button class="btn btn-outline btn-small" id="clearChat" style="margin-left:auto">Clear</button></div>
+        <div class="messages" id="messages" aria-live="polite"></div>
+        <form class="chat-form" id="chatForm"><input id="chatInput" autocomplete="off" placeholder="e.g. Find bricks under ₹10 per piece..." aria-label="Message UMB Mitra"><button class="btn btn-dark" type="submit">Send ↑</button></form>
+      </div>
+    </div>
+    <p class="muted small" style="margin-top:14px">This first version uses local rules, not a generative AI model. It is free to run and can be upgraded later with a server-side AI API.</p>
+  </section>
+  
+<section class="view" id="map">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow" style="color:var(--green2)">Bengaluru network</div>
+      <h2>Find reclaimed materials near you</h2>
+      <p>Explore illustrative material recovery hubs around Bengaluru.</p>
+    </div>
+    <button class="btn btn-dark" data-go="market">Explore listings ↗</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">4</div>
+      <div class="muted small">Demo hubs</div>
+    </div>
+    <div class="stat">
+      <div class="num">4</div>
+      <div class="muted small">City zones</div>
+    </div>
+    <div class="stat">
+      <div class="num">♻</div>
+      <div class="muted small">Reuse focused</div>
+    </div>
+    <div class="stat">
+      <div class="num">BLR</div>
+      <div class="muted small">Demo network</div>
+    </div>
+  </div>
+
+  
+<div class="panel">
+  <div class="map-filter-area">
+    <h3>Explore by material</h3>
+    <p class="muted small">
+      Select a material to highlight hubs that list it.
+    </p>
+
+    <div id="mapMaterialFilters" class="map-filters">
+      <button class="map-filter active" data-material="All">🌍 All materials</button>
+      <button class="map-filter" data-material="Bricks">🧱 Bricks</button>
+      <button class="map-filter" data-material="Steel">🏗️ Steel</button>
+      <button class="map-filter" data-material="Timber">🪵 Timber</button>
+      <button class="map-filter" data-material="Doors">🚪 Doors</button>
+      <button class="map-filter" data-material="Tiles">🔷 Tiles</button>
+      <button class="map-filter" data-material="Granite">🪨 Granite</button>
+    </div>
+  </div>
+
+  <div id="warehouseMap"></div>
+
+  <div class="map-legend">
+    <span><i class="legend-dot green-dot"></i> Bricks & masonry</span>
+    <span><i class="legend-dot orange-dot"></i> Metal & steel</span>
+    <span><i class="legend-dot blue-dot"></i> Timber & fittings</span>
+  </div>
+</div>
+
+
+  <div class="section-head">
+    <div>
+      <h2>Explore the hubs</h2>
+      <p>Select a hub on the map to see its sample materials.</p>
+    </div>
+  </div>
+
+  <div class="grid" id="warehouseCards"></div>
+
+  <p class="notice" style="margin-top:18px">
+    Demo notice: these are illustrative locations, not verified warehouses.
+    Material availability and supplier details are simulated.
+  </p>
+</section>
+
+<section class="view" id="materialMatcher">
+  <div class="section-head">
+    <div>
+      <h2>Find My Materials</h2>
+      <p>Match your project requirements with reclaimed materials.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <form id="matchingForm">
+      <div class="form-grid">
+        <div>
+          <label for="projectType">Project type</label>
+          <select id="projectType" required>
+            <option value="cafe">Café / Commercial space</option>
+            <option value="home">Residential building</option>
+            <option value="landscape">Landscape / Outdoor space</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="requiredMaterial">Material needed</label>
+          <select id="requiredMaterial" required>
+            <option value="Bricks">Bricks</option>
+            <option value="Steel">Steel</option>
+            <option value="Timber">Timber</option>
+            <option value="Doors">Doors</option>
+            <option value="Windows">Windows</option>
+            <option value="Tiles">Tiles</option>
+            <option value="Granite">Granite</option>
+            <option value="Pavers">Pavers</option>
+            <option value="Stone">Stone</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="requiredQuantity">Quantity required</label>
+          <input
+            id="requiredQuantity"
+            type="number"
+            min="1"
+            value="500"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="projectArea">Project area</label>
+          <select id="projectArea" required>
+            <option value="Peenya">Peenya</option>
+            <option value="Rajajinagar">Rajajinagar</option>
+            <option value="Whitefield">Whitefield</option>
+            <option value="Bommanahalli">Bommanahalli</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="maxPrice">Maximum budget (₹)</label>
+          <input
+            id="maxPrice"
+            type="number"
+            min="0"
+            value="50000"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="minCondition">Minimum condition</label>
+          <select id="minCondition" required>
+            <option value="1">Any reusable condition</option>
+            <option value="2" selected>Good or better</option>
+            <option value="3">Excellent only</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        Find Matching Materials
+      </button>
+    </form>
+  </div>
+
+  <div id="matchingResults" aria-live="polite"></div>
+</section>
+
+
+
+  <section class="view" id="rescue">
+    <div class="section-head"><div><div class="eyebrow" style="color:var(--green2)">Material Rescue Mode</div><h2>Don't demolish the value.</h2><p>Describe materials that may be recovered from a renovation or demolition.</p></div></div>
+    <div class="two-col">
+      <div class="panel">
+        <h3>Start a recovery draft</h3><p class="muted small">The form creates a draft checklist only. It does not publish a real supplier listing.</p>
+        
+<div class="panel" style="margin:12px 0">
+  <h3>Seller account</h3>
+  <p class="muted small">Create an account or sign in to publish material listings.</p>
+
+  <div class="field">
+    <label for="sellerEmail">Email address</label>
+    <input id="sellerEmail" type="email" required
+      autocomplete="email" placeholder="you@example.com">
+  </div>
+
+  <div class="field">
+    <label for="sellerPassword">Password</label>
+    <input id="sellerPassword" type="password" required
+      minlength="6" autocomplete="current-password"
+      placeholder="At least 6 characters">
+  </div>
+
+  <div class="pill-row">
+    <button class="btn btn-dark" type="button" id="sellerSignUp">
+      Create account
+    </button>
+    <button class="btn btn-outline" type="button" id="sellerSignIn">
+      Sign in
+    </button>
+  </div>
+
+  <p id="sellerAuthStatus" class="muted small" aria-live="polite"></p>
+</div>
+
+
+<div class="panel" style="margin:12px 0">
+  <h3>Seller Inbox</h3>
+  <p class="muted small">
+    View enquiries sent by buyers about your material listings.
+  </p>
+  <button class="btn btn-dark" type="button" id="loadSellerEnquiries">
+    Load my enquiries
+  </button>
+  <div id="sellerEnquiries" style="margin-top:16px">
+    <p class="muted small">Click the button to load your enquiries.</p>
+  </div>
+</div>
+
+        <form id="rescueForm">
+          <div class="field"><label for="rescueMaterial">Material type *</label><select id="rescueMaterial" required><option value="">Choose a material</option><option>Bricks</option><option>Doors</option><option>Steel beams</option><option>Tiles</option><option>Window frames</option><option>Timber</option><option>Concrete pavers</option><option>Granite</option><option>Mixed materials</option></select></div>
+          
+<div class="field"><label for="rescueQty">Approximate quantity *</label><input id="rescueQty" type="number" min="0.01" step="0.01"
+  required placeholder="e.g. 250">
+
+<label for="rescueUnit">Unit</label>
+<select id="rescueUnit" required>
+  <option value="pieces">Pieces</option>
+  <option value="sq ft">Square feet</option>
+  <option value="kg">Kilograms</option>
+  <option value="tonnes">Tonnes</option>
+  <option value="cubic metres">Cubic metres</option>
+</select></div>
+<div class="field"><label for="rescuePrice">Price per unit (₹) *</label><input id="rescuePrice" type="number" min="0.01" step="0.01" required placeholder="e.g. 8 per brick"></div>
+
+          <div class="field"><label for="rescueCondition">Current condition</label><select id="rescueCondition" required>
+  <option value="Fair">Fair</option>
+  <option value="Good" selected>Good</option>
+  <option value="Excellent">Excellent</option>
+</select></div>
+          <div class="field"><label for="rescueLocation">Location *</label><input id="rescueLocation" required placeholder="e.g. Bengaluru, Jayanagar"></div>
+          <div class="field"><label for="rescueContext">Project context</label><select id="rescueContext"><option>Renovation</option><option>Demolition</option><option>Interior refit</option><option>Other</option></select></div>
+          <div class="field"><label for="rescueNotes">Notes (optional)</label><textarea id="rescueNotes" placeholder="Dimensions, access, dismantling details..."></textarea></div>
+          <button class="btn btn-dark" type="submit">Generate recovery checklist ↗</button>
+        </form>
+      </div>
+<div class="field">
+  <label for="buildingArea">Approximate building area (sq ft)</label>
+  <input
+    id="buildingArea"
+    type="number"
+    min="1"
+    placeholder="e.g. 1200"
+  >
+</div>
+
+<div class="field">
+  <label for="recoveryRate">Estimated reusable proportion</label>
+  <select id="recoveryRate">
+    <option value="0.25">25% — Conservative scenario</option>
+    <option value="0.50" selected>50% — Moderate scenario</option>
+    <option value="0.75">75% — Optimistic scenario</option>
+  </select>
+</div>
+
+      <div class="panel" id="rescueOutput"><div class="material-icon">♻️</div><h3>Your recovery plan will appear here</h3><p class="muted">Add a material, quantity and location to generate a preliminary checklist.</p></div>
+    </div>
+    <p class="notice" style="margin-top:18px">Safety note: this tool does not assess structural safety or certify material quality. Materials must be inspected by a qualified person before reuse.</p>
+  </section>
+
+<section class="view" id="impact">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow" style="color:var(--green2)">
+        CIRCULARITY METRICS
+      </div>
+      <h2>Circular Impact Dashboard</h2>
+      <p>
+        See the potential environmental and economic benefits
+        of reusing construction materials.
+      </p>
+    </div>
+  </div>
+
+  <div class="impact-hero">
+    <div>
+      <div class="eyebrow" style="color:var(--green2)">
+        Potential reuse represented
+      </div>
+      <div class="impact-big" id="impactQty">—</div>
+      <p class="muted">
+        Sum of numeric listing quantities. Units may differ
+        between materials, so this is not a physical total.
+      </p>
+    </div>
+
+    <div>
+      <div class="pill-row">
+        <span class="pill">SDG 11</span>
+        <span class="pill">SDG 12</span>
+        <span class="pill">Demo estimates</span>
+      </div>
+      <p class="muted small"
+         style="max-width:300px;margin-top:14px">
+        Actual benefits depend on reuse, transport,
+        processing and the material being replaced.
+      </p>
+    </div>
+  </div>
+
+  <div class="stats" id="impactStats"></div>
+  <div class="stats" id="impactExtraStats"></div>
+
+  <div class="two-col">
+    <div class="panel">
+      <h3>Inventory by category</h3>
+      <div class="bar-list" id="categoryBars"></div>
+    </div>
+
+    <div class="panel">
+      <h3>How impact is estimated</h3>
+      <p class="muted">
+        The future system can calculate environmental
+        benefits using verified reuse quantities and
+        documented material-specific factors.
+      </p>
+      <div class="notice">
+        Calculation approach: avoided impact from new
+        material production minus transport and processing
+        impacts.
+      </div>
+      <p class="small muted">
+        CO₂ savings, waste diverted and money saved should
+        only be reported as verified outcomes when supported
+        by actual transactions and reliable data.
+      </p>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="footer">UMB Circular Intelligence · Student prototype · Simulated listings only · SDG 11 + SDG 12</footer>
+
+<script>
+const materials = [
+ {id:"MAT-001",name:"Reclaimed Red Clay Bricks",category:"Bricks",quantity:1000,unit:"pieces",price:8,priceUnit:"piece",condition:"Good",location:"Bengaluru",availability:"Available",icon:"🧱",description:"Reusable clay bricks for suitable construction projects."},
+ {id:"MAT-002",name:"Reclaimed Teak Wood Door",category:"Doors",quantity:4,unit:"units",price:2500,priceUnit:"unit",condition:"Refurbished",location:"Bengaluru",availability:"Available",icon:"🚪",description:"Refurbished timber doors. Dimensions and fittings need confirmation."},
+ {id:"MAT-003",name:"Reclaimed Steel Beams",category:"Steel",quantity:500,unit:"kg",price:45,priceUnit:"kg",condition:"Inspected",location:"Bengaluru",availability:"Available",icon:"🏗️",description:"Recovered steel beams requiring project-specific suitability checks."},
+ {id:"MAT-004",name:"Reclaimed Ceramic Tiles",category:"Tiles",quantity:300,unit:"sq ft",price:18,priceUnit:"sq ft",condition:"Good",location:"Bengaluru",availability:"Available",icon:"▦",description:"Recovered ceramic tiles for suitable flooring applications."},
+ {id:"MAT-005",name:"Reclaimed Wooden Window Frames",category:"Windows",quantity:8,unit:"units",price:900,priceUnit:"unit",condition:"Usable",location:"Bengaluru",availability:"Limited",icon:"🪟",description:"Reusable wooden frames; dimensions require confirmation."},
+ {id:"MAT-006",name:"Reclaimed Concrete Pavers",category:"Pavers",quantity:200,unit:"pieces",price:12,priceUnit:"piece",condition:"Good",location:"Bengaluru",availability:"Available",icon:"🪨",description:"Recovered pavers for appropriate outdoor applications."},
+ {id:"MAT-007",name:"Reclaimed Timber Planks",category:"Timber",quantity:150,unit:"board-feet",price:35,priceUnit:"board-foot",condition:"Usable",location:"Bengaluru",availability:"Available",icon:"🪵",description:"Recovered timber for suitable furniture or interior projects."},
+ {id:"MAT-008",name:"Reclaimed Granite Slabs",category:"Stone",quantity:80,unit:"sq ft",price:55,priceUnit:"sq ft",condition:"Inspected",location:"Bengaluru",availability:"Limited",icon:"⬛",description:"Recovered granite slabs; thickness and dimensions require confirmation."}
+];
+const $ = id => document.getElementById(id);
+const money = n => "₹" + Number(n).toLocaleString("en-IN");
+function go(view){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===view));document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===view));window.scrollTo({top:0,behavior:"smooth"});if(view==="market")renderMaterials();if(view==="impact")renderImpact();}
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.view)));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
+function materialCard(m){return `<article class="card"><div class="material-icon">${m.icon}</div><div class="card-top"><span class="tag">${m.category}</span><span class="tag ${m.availability==="Limited"?"limited":""}">${m.availability}</span></div><div><h3>${m.name}</h3><div class="muted small">${m.id} · ${m.location}</div></div><div class="price">${money(m.price)} <span class="muted small">/ ${m.priceUnit}</span></div><div class="pill-row"><span class="pill">${m.quantity.toLocaleString("en-IN")} ${m.unit}</span><span class="pill">${m.condition}</span></div><p class="muted small">${m.description}</p><div class="card-actions"><button class="btn btn-dark btn-small" onclick="askAbout('${m.id}')">Ask Mitra</button><button class="btn btn-outline btn-small" onclick="showDetails('${m.id}')">Details</button>${m.isReal ? `<button class="btn btn-outline btn-small" onclick="enquireAbout('${m.id}')">Enquire</button>` : ""}</div></article>`}
+function renderMaterials(){let q=$("searchInput").value.toLowerCase().trim(),cat=$("categoryFilter").value,cond=$("conditionFilter").value,sort=$("sortFilter").value;let arr=materials.filter(m=>(!q||[m.name,m.category,m.id,m.description].join(" ").toLowerCase().includes(q))&&(!cat||m.category===cat)&&(!cond||m.condition===cond));if(sort==="priceAsc")arr.sort((a,b)=>a.price-b.price);if(sort==="priceDesc")arr.sort((a,b)=>b.price-a.price);if(sort==="quantityDesc")arr.sort((a,b)=>b.quantity-a.quantity);$("materialGrid").innerHTML=arr.length?arr.map(materialCard).join(""):`<div class="empty" style="grid-column:1/-1">No materials match these filters. Try a different search.</div>`;$("resultCount").textContent=`Showing ${arr.length} of ${materials.length} simulated listings.`}
+
+async function loadSupabaseListings() {
+  const resultCount = $("resultCount");
+
+  try {
+    const { data, error } = await umbSupabase
+      .from("material_listings")
+      .select("*")
+      .eq("status", "available")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    // Keep the original sample cards and replace only
+    // the previously loaded Supabase cards.
+    const sampleMaterials = materials.filter(
+      m => !String(m.id).startsWith("supabase-")
+    );
+
+    const categoryMap = {
+      "Bricks": "Bricks",
+      "Doors": "Doors",
+      "Steel beams": "Steel",
+      "Tiles": "Tiles",
+      "Window frames": "Windows",
+      "Concrete pavers": "Pavers",
+      "Timber": "Timber",
+      "Granite": "Stone",
+      "Mixed materials": "Mixed materials"
+    };
+
+    const iconMap = {
+      "Bricks": "🧱",
+      "Doors": "🚪",
+      "Steel": "🏗️",
+      "Tiles": "◻️",
+      "Windows": "🪟",
+      "Pavers": "🧱",
+      "Timber": "🪵",
+      "Stone": "🪨",
+      "Mixed materials": "♻️"
+    };
+
+    const realMaterials = (data || []).map(item => ({
+      id: "supabase-" + item.id,
+      name: escapeHTML(item.title || item.material_type),
+      category: categoryMap[item.material_type] || "Mixed materials",
+      icon: iconMap[categoryMap[item.material_type]] || "♻️",
+      availability: "Available",
+      location: escapeHTML(item.location || ""),
+      price: Number(item.unit_price) || 0,
+      priceUnit: escapeHTML(item.unit || "unit"),
+      quantity: Number(item.quantity) || 0,
+      unit: escapeHTML(item.unit || "unit"),
+      condition: escapeHTML(item.material_condition || "Good"),
+      description: escapeHTML(item.description || ""),
+      isReal: true
+    }));
+
+    materials.splice(
+      0,
+      materials.length,
+      ...sampleMaterials,
+      ...realMaterials
+    );
+
+    renderMaterials();
+    renderImpact();
+
+    resultCount.textContent =
+      `Showing ${materials.length} listings, including ${realMaterials.length} seller listings.`;
+
+  } catch (error) {
+    console.error("Could not load seller listings:", error);
+    resultCount.textContent =
+      "Seller listings could not load. Check the browser console.";
+  }
+}
+
+function showDetails(id) {
+  const m = materials.find(x => x.id === id);
+  if (!m) {
+    alert("Listing not found. Please refresh and try again.");
+    return;
+  }
+
+  alert(
+    `${m.name}\n${m.id}\n` +
+    `Price: ${money(m.price)} per ${m.priceUnit}\n` +
+    `Quantity: ${m.quantity} ${m.unit}\n` +
+    `Condition: ${m.condition}\n` +
+    `Location: ${m.location}\n` +
+    `Availability: ${m.availability}\n\n` +
+    (m.isReal
+      ? "Seller-provided listing. Verify condition, stock and delivery before purchase."
+      : "DEMO DATA — verify all details before use.")
+  );
+}
+
+async function enquireAbout(id) {
+  const m = materials.find(x => x.id === id);
+  if (!m || !m.isReal) return;
+
+  const message = prompt(
+    `Enquire about ${m.name}.\nEnter your message for the seller:`,
+    "Hi, is this material still available? Please share more details."
+  );
+
+  if (!message || !message.trim()) return;
+
+  try {
+    const { data: { user }, error: authError } =
+      await umbSupabase.auth.getUser();
+
+    if (authError) throw authError;
+    if (!user) {
+      alert("Please sign in with a buyer account before enquiring.");
+      return;
+    }
+
+    const listingId = id.replace("supabase-", "");
+
+    const { error } = await umbSupabase
+      .from("enquiries")
+      .insert({
+        listing_id: listingId,
+        buyer_id: user.id,
+        message: message.trim()
+      });
+
+    if (error) throw error;
+
+    alert("Enquiry sent successfully!");
+  } catch (error) {
+    alert("Could not send enquiry: " + error.message);
+  }
+}
+
+function askAbout(id) {
+  const m = materials.find(x => x.id === id);
+  if (!m) {
+    alert("Listing not found. Please refresh and try again.");
+    return;
+  }
+
+  go("mitra");
+  addMessage("user", `Tell me about ${m.name}`);
+
+  if (m.isReal) {
+    addMessage(
+      "bot",
+      `${m.name}\n` +
+      `Price: ${money(m.price)} per ${m.priceUnit}\n` +
+      `Quantity: ${m.quantity} ${m.unit}\n` +
+      `Condition: ${m.condition}\n` +
+      `Location: ${m.location}\n` +
+      `Availability: ${m.availability}\n\n` +
+      "This is a seller-submitted listing. Please contact the seller directly to verify availability, dimensions and delivery."
+    );
+  } else {
+    addMessage("bot", formatMaterial(m));
+  }
+}
+function formatMaterial(m){return `${m.name} (${m.id})\nPrice: ${money(m.price)} per ${m.priceUnit}\nQuantity: ${m.quantity} ${m.unit}\nCondition: ${m.condition}\nLocation: ${m.location}\nAvailability: ${m.availability}\n\nWhy it may fit: this is the matching demo listing. Confirm dimensions, actual condition, availability and transport before purchase.`}
+const categoryWords={Bricks:["brick","bricks","clay"],Doors:["door","doors","teak"],Steel:["steel","beam","beams"],Tiles:["tile","tiles","flooring"],Windows:["window","windows","frame"],Pavers:["paver","pavers"],Timber:["timber","wood","plank","planks"],Stone:["granite","stone","slab","slabs"]};
+function getCategory(text){for(const [cat,words] of Object.entries(categoryWords)){if(words.some(w=>text.includes(w)))return cat}return null}
+function addMessage(role,text){const el=document.createElement("div");el.className="message "+(role==="user"?"user":"bot");el.textContent=text;$("messages").appendChild(el);$("messages").scrollTop=$("messages").scrollHeight}
+function mitraReply(raw){const text=raw.toLowerCase();
+ if(/hello|hi\b|hey\b/.test(text))return "Hi! I'm UMB Mitra. I can search our sample inventory, compare materials, check listed quantities and help draft a material recovery checklist. What are you building or looking for?";
+ if(/rescue|demolition|demolish|renovation|i have materials/.test(text))return "Let's use Material Rescue Mode. Open the Material Rescue tab and enter the material type, approximate quantity, condition and location. I'll help structure a recovery draft; the owner must verify details before any listing is considered real.";
+ if(/sustainab|carbon|co2|environment|sdg|waste|umb help/.test(text))return "UMB helps connect reusable construction materials with potential new users, supporting SDG 11 and SDG 12. This demo does not claim verified CO₂ savings. A real impact estimate needs verified reused quantities, material-specific factors, and transport/processing impacts.";
+ if(/compare/.test(text)){let found=materials.filter(m=>m.category.toLowerCase().split(" ").some(w=>w.length>3&&text.includes(w))||text.includes(m.name.toLowerCase()));if(found.length<2){const cats=Object.keys(categoryWords).filter(c=>text.includes(c.toLowerCase()));found=materials.filter(m=>cats.includes(m.category))}if(found.length<2)return "Tell me which two materials you want to compare, for example: 'Compare tiles and granite'.";return "Here is a comparison of matching demo listings:\n\n"+found.slice(0,4).map(m=>`${m.name}: ${money(m.price)} per ${m.priceUnit}; ${m.quantity} ${m.unit}; ${m.condition}; ${m.availability}.`).join("\n")+"\n\nNote: prices use different units, so compare only like-for-like materials and units."}
+ const cat=getCategory(text);const budgetMatch=text.match(/(?:under|below|less than|budget of|max(?:imum)?)\s*₹?\s*([\d,]+)/);const budget=budgetMatch?Number(budgetMatch[1].replace(/,/g,"")):null;const qtyMatch=text.match(/(\d[\d,]*)\s*(pieces?|units?|kg|kilograms?|sq\s*ft|square feet|board-feet)/);const qty=qtyMatch?Number(qtyMatch[1].replace(/,/g,"")):null;
+ if(cat||budget!==null){let results=materials.filter(m=>(!cat||m.category===cat)&&(!budget||m.price<=budget));if(!results.length)return `I couldn't find a listing matching ${cat||"that budget"}${budget!==null?" under "+money(budget):""}. Try a different material or budget. I won't invent unavailable stock.`;results.sort((a,b)=>a.price-b.price);return "Here are the matching demo listings:\n\n"+results.slice(0,3).map(m=>formatMaterial(m)+(qty!==null?`\nQuantity check: ${qty>m.quantity?"This listing cannot fulfil the full requested quantity.":"The quantity is numerically sufficient; confirm suitability and dimensions."}`:"")).join("\n\n---\n\n")+"\n\nThese are simulated offers, not live supplier inventory."}
+ if(/project|cafe|café|500\s*(sq|square)|planning|plan/.test(text))return "I can help make a preliminary material shortlist. Tell me the material type, approximate area, quantity and budget. For a 500 sq ft café, the actual requirement depends on drawings and design, so I won't invent precise construction quantities. Explore Materials shows the demo options.";
+ if(/price|cost|cheap|afford/.test(text))return "I can compare listed demo prices, but I need a material type or category to avoid comparing unlike units. Try 'Find bricks under ₹10 per piece'.";
+ if(/available|inventory|materials|listings/.test(text))return "The demo has bricks, teak doors, steel beams, ceramic tiles, wooden window frames, concrete pavers, timber planks and granite slabs. Visit Explore Materials to filter and compare the sample listings.";
+ return "I can help search bricks, doors, steel beams, tiles, window frames, pavers, timber and granite. Try 'Find cheap bricks', 'I need teak doors', 'Compare tiles and granite', or 'I have materials from demolition'. I'm a local rule-based demo assistant, so please phrase requests with a material name for the best results.";
+}
+$("chatForm").addEventListener("submit",e=>{e.preventDefault();const text=$("chatInput").value.trim();if(!text)return;addMessage("user",text);$("chatInput").value="";setTimeout(()=>addMessage("bot",mitraReply(text)),100)});
+document.querySelectorAll("[data-prompt]").forEach(b=>b.addEventListener("click",()=>{$("chatInput").value=b.dataset.prompt;$("chatForm").requestSubmit()}));
+$("clearChat").addEventListener("click",()=>{ $("messages").innerHTML="";welcomeMessage()});
+function welcomeMessage(){addMessage("bot","Hi, I'm UMB Mitra ✳\nI can help you find reclaimed materials from our sample inventory. Tell me a material, budget or quantity to get started.")}
+function renderImpact(){const total=materials.reduce((s,m)=>s+m.quantity,0);$("impactQty").textContent=total.toLocaleString("en-IN");$("impactStats").innerHTML=`<div class="stat"><div class="num">${materials.length}</div><div class="muted small">Sample listings</div></div><div class="stat"><div class="num">${new Set(materials.map(m=>m.category)).size}</div><div class="muted small">Material categories</div></div><div class="stat"><div class="num">${materials.filter(m=>m.availability==="Available").length}</div><div class="muted small">Marked available in demo</div></div><div class="stat"><div class="num">0</div><div class="muted small">Verified impact claims</div></div>`;const counts={};materials.forEach(m=>counts[m.category]=(counts[m.category]||0)+1);$("categoryBars").innerHTML=Object.entries(counts).map(([k,v])=>`<div class="bar-row"><span>${k}</span><div class="bar"><span style="width:${v/materials.length*100}%"></span></div><strong>${v}</strong></div>`).join("")}
+// Illustrative impact estimates for the demo only.
+
+const reclaimedMaterialValue = materials.reduce(
+  (total, material) =>
+    total +
+    (Number(material.quantity) || 0) *
+    (Number(material.price) || 0),
+  0
+);
+
+const estimatedMoneySaved =
+  reclaimedMaterialValue * (0.30 / 0.70);
+  
+const demoMaterialWeightsKg = {
+  "MAT-001": 2.5,   // kg per brick
+  "MAT-002": 25,    // kg per door
+  "MAT-003": 1,     // kg per kg of steel
+  "MAT-004": 2.5,   // kg per sq ft of tiles
+  "MAT-005": 15,    // kg per window frame
+  "MAT-006": 5,     // kg per paver
+  "MAT-007": 1,     // illustrative kg per board-foot
+  "MAT-008": 5      // kg per sq ft of granite
+};
+
+const estimatedWasteKg = materials.reduce(
+  (total, material) =>
+    total +
+    (Number(material.quantity) || 0) *
+    (demoMaterialWeightsKg[material.id] || 0),
+  0
+);
+
+const estimatedWasteTonnes = estimatedWasteKg / 1000;
+
+const impactMetrics = [
+
+{
+  title: "Potential waste diverted",
+  value: estimatedWasteTonnes.toLocaleString("en-IN", {
+    maximumFractionDigits: 2
+  }) + " tonnes",
+  note: "Illustrative estimate based on sample listing quantities and assumed material weights. Actual waste diversion requires verified weights and confirmed reuse."
+},
+
+  {
+    title: "Illustrative CO₂ avoided",
+value: "Up to 685 kg CO₂e",
+note: "Steel-only estimate: 500 kg × 1.37 kg CO₂/kg. Based on CPWD 2024; excludes transport and refurbishment. Not a verified saving."
+  },
+  
+{
+  title: "Potential money saved",
+  value: "₹" + Math.round(estimatedMoneySaved).toLocaleString("en-IN"),
+  note: "Illustrative demo estimate assuming reclaimed materials cost 30% less than equivalent new materials. Actual savings depend on market prices, transport and refurbishment."
+}
+];
+
+$("impactExtraStats").innerHTML = impactMetrics.map(metric => `
+  <div class="stat">
+    <div class="num" style="font-size:20px">${metric.value}</div>
+    <div><strong>${metric.title}</strong></div>
+    <div class="muted small">${metric.note}</div>
+  </div>
+`).join("");
+
+$("rescueForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const material = $("rescueMaterial").value;
+  const qty = Number($("rescueQty").value);
+  const unit = $("rescueUnit").value;
+  const price = Number($("rescuePrice").value);
+  const condition = $("rescueCondition").value;
+  const location = $("rescueLocation").value.trim();
+  const context = $("rescueContext").value;
+  const notes = $("rescueNotes").value.trim();
+  const output = $("rescueOutput");
+
+  if (
+    !material ||
+    !location ||
+    !Number.isFinite(qty) || qty <= 0 ||
+    !Number.isFinite(price) || price <= 0
+  ) {
+    output.innerHTML =
+      '<p class="notice">Please enter valid material, location, quantity and price details.</p>';
+    return;
+  }
+
+  output.innerHTML =
+    '<p class="notice">Saving your listing...</p>';
+
+  try {
+    const { data: { user }, error: userError } =
+      await umbSupabase.auth.getUser();
+
+    if (userError) throw userError;
+
+    if (!user) {
+      throw new Error("Please sign in to publish a listing.");
+    }
+
+    const { error } = await umbSupabase
+      .from("material_listings")
+      .insert({
+        seller_id: user.id,
+        title: `${material} - ${context}`,
+        material_type: material,
+        quantity: qty,
+        unit: unit,
+        unit_price: price,
+        material_condition: condition,
+        location: location,
+        description:
+          `Project: ${context}. Notes: ${notes || "None provided"}`
+      });
+
+    if (error) throw error;
+
+    output.innerHTML = `
+      <h3>Listing saved successfully!</h3>
+      <p>Your material details have been saved to the database.</p>
+      <p><strong>Material:</strong> ${escapeHTML(material)}</p>
+      <p><strong>Quantity:</strong> ${qty} ${escapeHTML(unit)}</p>
+      <p><strong>Price per unit:</strong> ₹${price.toLocaleString("en-IN")}</p>
+      <p><strong>Condition:</strong> ${escapeHTML(condition)}</p>
+      <p><strong>Location:</strong> ${escapeHTML(location)}</p>
+      <p><strong>Project:</strong> ${escapeHTML(context)}</p>
+      <p><strong>Notes:</strong> ${escapeHTML(notes || "None provided")}</p>
+      <p class="notice">
+        The listing is saved in Supabase. It will appear in the marketplace
+        once the marketplace display is connected to the database.
+        Material quality and availability still need verification.
+      </p>
+    `;
+
+    window.currentRescue =
+      `UMB MATERIAL LISTING\n` +
+      `Material: ${material}\n` +
+      `Quantity: ${qty} ${unit}\n` +
+      `Price per unit: ₹${price}\n` +
+      `Condition: ${condition}\n` +
+      `Location: ${location}\n` +
+      `Project: ${context}\n` +
+      `Notes: ${notes || "None"}\n` +
+      `Status: Saved; verification required.`;
+
+  } catch (error) {
+    output.innerHTML = `
+      <h3>Could not save the listing</h3>
+      <p class="notice">${escapeHTML(error.message)}</p>
+      <p>Check your sign-in status and database permissions, then try again.</p>
+    `;
+  }
+});
+
+function copyRescue(){if(!window.currentRescue)return;navigator.clipboard?.writeText(window.currentRescue).then(()=>alert("Draft copied.")).catch(()=>alert(window.currentRescue))}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+$("searchInput").addEventListener("input",renderMaterials);$("categoryFilter").addEventListener("change",renderMaterials);$("conditionFilter").addEventListener("change",renderMaterials);$("sortFilter").addEventListener("change",renderMaterials);
+[...new Set(materials.map(m=>m.category))].forEach(c=>$("categoryFilter").insertAdjacentHTML("beforeend",`<option>${c}</option>`));
+[...new Set(materials.map(m=>m.condition))].forEach(c=>$("conditionFilter").insertAdjacentHTML("beforeend",`<option>${c}</option>`));
+$("homeStats").innerHTML=`<div class="stat"><div class="num">${materials.length}</div><div class="muted small">Demo listings</div></div><div class="stat"><div class="num">${new Set(materials.map(m=>m.category)).size}</div><div class="muted small">Material categories</div></div><div class="stat"><div class="num">${materials.filter(m=>m.availability==="Available").length}</div><div class="muted small">Marked available</div></div><div class="stat"><div class="num">₹8+</div><div class="muted small">Starting sample price</div></div>`;
+$("featuredGrid").innerHTML=materials.slice(0,3).map(materialCard).join("");
+welcomeMessage();renderMaterials();renderImpact();
+
+const umbWarehouses = [
+  {
+    name: "North Bengaluru Hub",
+    area: "Peenya",
+    lat: 13.0328,
+    lng: 77.5271,
+    materials: ["Bricks", "Steel", "Timber"]
+  },
+  {
+    name: "West Bengaluru Hub",
+    area: "Rajajinagar",
+    lat: 13.0108,
+    lng: 77.5550,
+    materials: ["Doors", "Windows", "Pavers"]
+  },
+  {
+    name: "East Bengaluru Hub",
+    area: "Whitefield",
+    lat: 12.9698,
+    lng: 77.7499,
+    materials: ["Steel", "Granite", "Bricks"]
+  },
+  {
+    name: "South Bengaluru Hub",
+    area: "Bommanahalli",
+    lat: 12.8996,
+    lng: 77.6175,
+    materials: ["Tiles", "Stone", "Doors"]
+  }
+];
+
+let umbMap = null;
+
+function renderWarehouseCards() {
+  const container = document.getElementById("warehouseCards");
+  if (!container) return;
+
+  container.innerHTML = umbWarehouses.map((hub, index) => `
+    <article class="card warehouse-card"
+      data-hub-index="${index}"
+      tabindex="0"
+      role="button"
+      aria-label="View ${hub.name} on map">
+      <div class="hub-icon">📍</div>
+      <h3>${hub.name}</h3>
+      <p class="muted small">${hub.area}</p>
+      <div class="pill-row">
+        ${hub.materials.map(material =>
+          `<span class="pill">${material}</span>`
+        ).join("")}
+      </div>
+      <button class="btn btn-outline btn-small" type="button">
+        Show on map ↗
+      </button>
+    </article>
+  `).join("");
+
+  container.querySelectorAll(".warehouse-card").forEach(card => {
+    
+const openHub = () => {
+  const hubIndex = Number(card.dataset.hubIndex);
+  const hub = umbWarehouses[hubIndex];
+  if (!hub) return;
+
+  document.querySelectorAll("#warehouseCards .warehouse-card")
+    .forEach(item => {
+      item.classList.remove("selected-hub");
+    });
+
+  card.classList.add("selected-hub");
+
+  showUmbMap();
+
+  if (umbMap) {
+    umbMap.setView([hub.lat, hub.lng], 14);
+
+    const matchingMarker = (window.umbMapMarkers || [])
+      .find(item => item.hub === hub);
+
+    if (matchingMarker) {
+      matchingMarker.marker.openPopup();
+    }
+  }
+};
+
+    card.addEventListener("click", openHub);
+    card.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openHub();
+      }
+    });
+  });
+}
+
+function showUmbMap() {
+  const mapElement = document.getElementById("warehouseMap");
+  if (!mapElement || typeof L === "undefined") return;
+
+  if (!umbMap) {
+    umbMap = L.map("warehouseMap").setView(
+      [12.9716, 77.5946],
+      11
+    );
+
+    L.tileLayer(
+  "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+  {
+    attribution:
+      '&copy; OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team',
+    maxZoom: 19
+  }
+).addTo(umbMap);
+
+    
+const markerColours = {
+  bricks: "#22966e",
+  steel: "#ed9144",
+  timber: "#468bd0",
+  doors: "#8967c6",
+  tiles: "#d65c78",
+  granite: "#64748b"
+};
+
+const markerEmojis = {
+  bricks: "🧱",
+  steel: "🏗️",
+  timber: "🪵",
+  doors: "🚪",
+  tiles: "🔷",
+  granite: "🪨"
+};
+
+window.umbMapMarkers = [];
+
+umbWarehouses.forEach(hub => {
+  const firstMaterial = hub.materials[0].toLowerCase();
+  const category = firstMaterial.includes("brick")
+    ? "bricks"
+    : firstMaterial.includes("steel")
+    ? "steel"
+    : firstMaterial.includes("timber")
+    ? "timber"
+    : firstMaterial.includes("door")
+    ? "doors"
+    : firstMaterial.includes("tile")
+    ? "tiles"
+    : firstMaterial.includes("granite")
+    ? "granite"
+    : "bricks";
+
+  const icon = L.divIcon({
+    className: "",
+    html: `<div class="warehouse-marker"
+      style="background:${markerColours[category]}">
+      <span>${markerEmojis[category]}</span>
+    </div>`,
+    iconSize: [38, 38],
+    iconAnchor: [19, 38],
+    popupAnchor: [0, -34]
+  });
+
+  const popup = `
+    <div class="hub-popup">
+      <h3>${hub.name}</h3>
+      <p>📍 ${hub.area}</p>
+      <p><strong>Sample materials</strong></p>
+      ${hub.materials.map(material =>
+        `<span class="popup-tag">${material}</span>`
+      ).join("")}
+      <p style="margin-top:10px;font-size:12px;color:#68766f">
+        Illustrative demo hub · Inventory not verified
+      </p>
+    </div>
+  `;
+
+  const marker = L.marker([hub.lat, hub.lng], { icon })
+    .addTo(umbMap)
+    .bindPopup(popup);
+    marker.on("click", () => {
+  document.querySelectorAll("#warehouseCards .warehouse-card")
+    .forEach(card => {
+      card.classList.remove("selected-hub");
+    });
+
+  const matchingCard = document.querySelector(
+    `#warehouseCards .warehouse-card[data-hub-index="${umbWarehouses.indexOf(hub)}"]`
+  );
+
+  if (matchingCard) {
+    matchingCard.classList.add("selected-hub");
+    matchingCard.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest"
+    });
+  }
+});
+
+    window.umbMapMarkers.push({ marker, hub });
+});
+
+  }
+
+  requestAnimationFrame(() => {
+    umbMap.invalidateSize();
+  });
+}
+
+renderWarehouseCards();
+
+// Works with the existing data-view navigation.
+document.querySelectorAll("[data-view='map']").forEach(button => {
+  button.addEventListener("click", () => {
+    setTimeout(showUmbMap, 100);
+  });
+});
+
+// Also initialise the map when the map page is opened by
+// another button using data-go="map".
+document.querySelectorAll("[data-go='map']").forEach(button => {
+  button.addEventListener("click", () => {
+    setTimeout(showUmbMap, 100);
+  });
+});
+
+const mapFilterContainer =
+  document.getElementById("mapMaterialFilters");
+
+if (mapFilterContainer &&
+    !mapFilterContainer.dataset.connected) {
+
+  mapFilterContainer.dataset.connected = "true";
+
+  mapFilterContainer.addEventListener("click", event => {
+    const button = event.target.closest("[data-material]");
+    if (!button) return;
+
+    mapFilterContainer.querySelectorAll(".map-filter")
+      .forEach(filter => filter.classList.remove("active"));
+
+    button.classList.add("active");
+
+    const selectedMaterial = button.dataset.material.toLowerCase();
+
+    (window.umbMapMarkers || []).forEach(({ marker, hub }) => {
+      const matches = selectedMaterial === "all" ||
+        hub.materials.some(material =>
+          material.toLowerCase() === selectedMaterial
+        );
+
+      if (matches && !umbMap.hasLayer(marker)) {
+        marker.addTo(umbMap);
+      } else if (!matches && umbMap.hasLayer(marker)) {
+        umbMap.removeLayer(marker);
+      }
+    });
+
+    document.querySelectorAll("#warehouseCards .warehouse-card")
+      .forEach(card => {
+        const hub = umbWarehouses[Number(card.dataset.hubIndex)];
+        const matches = selectedMaterial === "all" ||
+          (hub && hub.materials.some(material =>
+            material.toLowerCase() === selectedMaterial
+          ));
+
+        card.style.display = matches ? "" : "none";
+      });
+  });
+}
+
+/* URBAN MATERIAL BANK — DEMO MATCHING SYSTEM */
+
+const matchingForm = document.getElementById("matchingForm");
+const matchingResults = document.getElementById("matchingResults");
+
+if (matchingForm && matchingResults &&
+    !matchingForm.dataset.connected) {
+
+  matchingForm.dataset.connected = "true";
+
+  // Illustrative prices per demo unit (not live market prices).
+  const demoPrices = {
+    bricks: 12,
+    steel: 65,
+    timber: 1800,
+    doors: 4500,
+    windows: 3500,
+    tiles: 35,
+    granite: 120,
+    pavers: 28,
+    stone: 50
+  };
+
+  // Generate repeatable sample inventory for listed hub materials.
+  function getDemoStock(hub, hubIndex, material) {
+    const materialIndex = hub.materials.findIndex(
+      item => item.toLowerCase() === material.toLowerCase()
+    );
+
+    if (materialIndex === -1) return null;
+
+    return {
+      quantity: 350 + (
+        (hubIndex * 271 + materialIndex * 173) % 1800
+      ),
+      price: demoPrices[material.toLowerCase()] || 100,
+      condition: 1 + (
+        (hubIndex + materialIndex) % 3
+      )
+    };
+  }
+
+  function distanceKm(pointA, pointB) {
+    const radians = degrees => degrees * Math.PI / 180;
+    const latDifference = radians(pointB.lat - pointA.lat);
+    const lngDifference = radians(pointB.lng - pointA.lng);
+
+    const a =
+      Math.sin(latDifference / 2) ** 2 +
+      Math.cos(radians(pointA.lat)) *
+      Math.cos(radians(pointB.lat)) *
+      Math.sin(lngDifference / 2) ** 2;
+
+    return 6371 * 2 * Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1 - a)
+    );
+  }
+
+  matchingForm.addEventListener("submit", event => {
+    event.preventDefault();
+
+    const material =
+      document.getElementById("requiredMaterial").value;
+    const requiredQuantity =
+      Number(document.getElementById("requiredQuantity").value);
+    const projectArea =
+      document.getElementById("projectArea").value;
+    const maxBudget =
+      Number(document.getElementById("maxPrice").value);
+    const minCondition =
+      Number(document.getElementById("minCondition").value);
+
+    if (
+      !Number.isFinite(requiredQuantity) ||
+      requiredQuantity <= 0 ||
+      !Number.isFinite(maxBudget) ||
+      maxBudget < 0
+    ) {
+      matchingResults.innerHTML =
+        "<p class='notice'>Enter a valid quantity and a non-negative budget.</p>";
+      return;
+    }
+
+    // Use the selected demo area as the destination.
+    const destination = umbWarehouses.find(hub =>
+      hub.area === projectArea || hub.name === projectArea
+    );
+
+    if (!destination) {
+      matchingResults.innerHTML =
+        "<p class='notice'>The selected demo area could not be found. Check the hub area names.</p>";
+      return;
+    }
+
+    const candidates = umbWarehouses
+      .map((hub, hubIndex) => {
+        const stock = getDemoStock(hub, hubIndex, material);
+        if (!stock) return null;
+
+        const distance = distanceKm(destination, hub);
+        const totalCost = stock.quantity >= requiredQuantity
+          ? requiredQuantity * stock.price
+          : stock.quantity * stock.price;
+
+        const quantityRatio = Math.min(
+          stock.quantity / requiredQuantity, 1
+        );
+
+        const budgetRatio = maxBudget > 0
+          ? Math.min(totalCost / maxBudget, 1)
+          : (totalCost === 0 ? 0 : 1);
+
+        
+const distanceScore =
+  Math.max(0, 1 - distance / 30) * 25;
+
+const quantityScore =
+  quantityRatio * 30;
+
+const priceScore =
+  maxBudget > 0
+    ? Math.max(0, 1 - totalCost / maxBudget) * 25
+    : (totalCost === 0 ? 25 : 0);
+
+const conditionScore =
+  (stock.condition / 3) * 20;
+
+const stockPenalty =
+  stock.quantity < requiredQuantity ? 15 : 0;
+
+const conditionPenalty =
+  stock.condition < minCondition ? 20 : 0;
+
+        return {
+          hub,
+          stock,
+          distance,
+          totalCost,
+          quantityRatio,
+          score: Math.max(0, Math.min(100, Math.round(
+  distanceScore + quantityScore +
+  priceScore + conditionScore -
+  stockPenalty - conditionPenalty
+)))
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => b.score - a.score);
+
+    // Apply the user's minimum condition and total budget.
+    let suitable = candidates.filter(item =>
+      item.stock.condition >= minCondition &&
+      item.totalCost <= maxBudget
+    );
+
+    
+const hasSuitableMatches = suitable.length > 0;
+
+if (candidates.length === 0) {
+  matchingResults.innerHTML = `
+    <div class="panel" style="margin-top:18px">
+      <h3>No demo stock found</h3>
+      <p>No sample inventory was found for this material.
+      Try another material type.</p>
+    </div>
+  `;
+  return;
+}
+
+// If strict filters find no results, show the three
+// highest-ranked alternatives instead.
+if (!hasSuitableMatches) {
+  suitable = candidates.slice(0, 3);
+}
+
+    matchingResults.innerHTML = `
+      <div class="section-head" style="margin-top:24px">
+        <div>
+          
+<h2>${hasSuitableMatches
+  ? "Recommended Matches"
+  : "Closest Available Alternatives"}</h2>
+<p>${suitable.length} demo option(s) shown for
+${material} near ${projectArea}.</p>
+${!hasSuitableMatches ? `
+  <div class="notice">
+    No option met every budget and condition filter.
+    These are the closest ranked alternatives; check their
+    prices and condition before choosing.
+  </div>
+` : ""}
+
+        </div>
+      </div>
+      
+<div class="panel" style="margin-bottom:18px;border-left:4px solid #14b8a6">
+  <h3>✨ Smart Recommendation Insight</h3>
+  <p>
+    The top-ranked option is
+    <strong>${suitable[0].hub.name}</strong>,
+    approximately ${suitable[0].distance.toFixed(1)} km from your project.
+  </p>
+  <p>
+    It has a match score of <strong>${suitable[0].score}/100</strong>
+    and an estimated total cost of
+    <strong>₹${suitable[0].totalCost.toLocaleString("en-IN")}</strong>.
+  </p>
+  <p class="muted small">
+    Ranked using estimated distance, quantity fit, price and condition.
+    Confirm inventory and suitability with the supplier.
+  </p>
+</div>
+
+
+      <p class="notice">
+        Demo estimates only. Quantities, prices, condition and
+        distances are simulated; confirm all details with a supplier.
+      </p>
+
+      <div class="grid">
+        ${suitable.map((item, index) => {
+          const enough = item.stock.quantity >= requiredQuantity;
+          const conditionLabel = [
+            "Unknown",
+            "Fair",
+            "Good",
+            "Excellent"
+          ][item.stock.condition];
+
+          return `
+            <article class="panel">
+              <p>
+<strong>${
+  index === 0
+    ? "⭐ Best overall match"
+    : item.totalCost === Math.min(...suitable.map(m => m.totalCost))
+      ? "💰 Best price"
+      : item.distance === Math.min(...suitable.map(m => m.distance))
+        ? "📍 Closest hub"
+        : "Option " + (index + 1)
+}</strong>
+</p>
+              <h3>${item.hub.name}</h3>
+              <p>📍 ${item.hub.area}</p>
+              <p><strong>Distance:</strong> ${item.distance.toFixed(1)} km (approx.)</p>
+              <p><strong>Demo stock:</strong> ${item.stock.quantity} units</p>
+              <p><strong>Your requirement:</strong> ${requiredQuantity} units</p>
+              <p><strong>Quantity fit:</strong> ${
+                enough ? "Enough for full requirement" :
+                "Partial match — more stock needed"
+              }</p>
+              <p><strong>Demo unit price:</strong> ₹${item.stock.price.toLocaleString("en-IN")}</p>
+              <p><strong>Estimated cost:</strong> ₹${item.totalCost.toLocaleString("en-IN")}</p>
+              <p><strong>Condition:</strong> ${conditionLabel}</p>
+              <p><strong>Match score:</strong> ${item.score}/100</p>
+              
+<p><strong>Why this match?</strong></p>
+<ul>
+  <li>${
+    item.stock.quantity >= requiredQuantity
+      ? "Enough stock for your full requirement"
+      : "Partial stock — additional material may be needed"
+  }</li>
+  <li>${
+    item.stock.condition >= minCondition
+      ? "Meets your minimum condition requirement"
+      : "Condition is below your selected minimum"
+  }</li>
+  <li>${
+    item.totalCost <= maxBudget
+      ? "Within your estimated budget"
+      : "Exceeds your budget — consider increasing it"
+  }</li>
+  <li>${
+    item.distance <= 5
+      ? "Nearby hub"
+      : item.distance <= 15
+        ? "Moderate distance from your project"
+        : "Farther from your project location"
+  }</li>
+</ul>
+
+              <p class="notice">Illustrative inventory, not verified stock.</p>
+              
+<button
+  type="button"
+  class="btn btn-primary"
+  data-view-match-hub="${umbWarehouses.indexOf(item.hub)}">
+  View Hub on Map
+</button>
+
+            </article>
+          `;
+        }).join("")}
+      </div>
+        `;
+  });
+
+    matchingResults.addEventListener("click", event => {
+    const button = event.target.closest("[data-view-match-hub]");
+    if (!button) return;
+
+    const hubIndex = Number(button.dataset.viewMatchHub);
+    const hub = umbWarehouses[hubIndex];
+
+    if (!hub) {
+      console.error("Hub not found:", hubIndex);
+      return;
+    }
+
+    console.log("View Hub clicked:", hub.name);
+
+    go("map");
+
+setTimeout(() => {
+  showUmbMap();
+
+  if (!umbMap) {
+        console.error("Map is not initialised.");
+        return;
+      }
+
+      umbMap.invalidateSize();
+      umbMap.setView([hub.lat, hub.lng], 14);
+
+      const markerItem = (window.umbMapMarkers || [])
+        .find(item => item.hub === hub);
+
+      if (markerItem) {
+        markerItem.marker.addTo(umbMap);
+        markerItem.marker.openPopup();
+      } else {
+        console.error("Marker not found:", hub.name);
+      }
+    }, 300);
+  });
+}
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://fogmgnizreihfnrdedts.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_lmOHCSVeUNMtARc266Hp0A_sYGZBNRe";
+
+  const umbSupabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+  
+  async function sellerAuth(action) {
+    const email = document.getElementById("sellerEmail").value.trim();
+    const password = document.getElementById("sellerPassword").value;
+    const status = document.getElementById("sellerAuthStatus");
+
+    if (!email || !password) {
+      status.textContent = "Enter your email and password.";
+      return;
+    }
+
+    status.textContent = "Please wait...";
+
+    try {
+      let result;
+
+      if (action === "signup") {
+        result = await umbSupabase.auth.signUp({ email, password });
+      } else {
+        result = await umbSupabase.auth.signInWithPassword({
+          email,
+          password
+        });
+      }
+
+      if (result.error) throw result.error;
+
+      if (action === "signup" && !result.data.session) {
+        status.textContent =
+          "Account created! Check your email to confirm your account.";
+      } else {
+        status.textContent = "Signed in successfully!";
+      }
+    } catch (error) {
+      status.textContent = "Error: " + error.message;
+    }
+  }
+
+  document.getElementById("sellerSignUp").addEventListener("click", () => {
+    sellerAuth("signup");
+  });
+
+  document.getElementById("sellerSignIn").addEventListener("click", () => {
+    sellerAuth("signin");
+  });
+  
+loadSupabaseListings();
+
+document.getElementById("loadSellerEnquiries").addEventListener("click", async () => {
+  const output = document.getElementById("sellerEnquiries");
+  output.textContent = "Loading enquiries...";
+
+  try {
+    const { data: { user }, error: authError } =
+      await umbSupabase.auth.getUser();
+
+    if (authError) throw authError;
+
+    if (!user) {
+      output.textContent = "Please sign in first to view your enquiries.";
+      return;
+    }
+
+    const { data, error } = await umbSupabase
+      .from("enquiries")
+      .select("id, message, status, seller_response, created_at, material_listings!inner(title, seller_id)")
+      .eq("material_listings.seller_id", user.id)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      output.textContent = "No enquiries received yet.";
+      return;
+    }
+
+    output.innerHTML = data.map(enquiry => `
+      <div class="panel" style="margin:10px 0">
+        <h4>${escapeHTML(enquiry.material_listings.title)}</h4>
+        <p><strong>Buyer message:</strong> ${escapeHTML(enquiry.message)}</p>
+        <p><strong>Status:</strong> ${escapeHTML(enquiry.status)}</p>
+        ${enquiry.seller_response
+          ? `<p><strong>Your reply:</strong> ${escapeHTML(enquiry.seller_response)}</p>`
+          : ""}
+        <p class="muted small">${new Date(enquiry.created_at).toLocaleString()}</p>
+      </div>
+    `).join("");
+  } catch (error) {
+    output.textContent = "Could not load enquiries: " + error.message;
+  }
+});
+
+</script>
+
+</body>
+</html>
