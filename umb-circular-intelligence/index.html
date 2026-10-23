@@ -11,6 +11,55 @@
 />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
+  
+/* UMB premium hover animations */
+.material-card,
+.card,
+.hub-card,
+button,
+.btn {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease;
+}
+
+
+article.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+article.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(20, 83, 45, 0.18);
+}
+
+button:hover,
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+button:active,
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* Smooth appearance for sections */
+[data-view] {
+  transition: opacity 0.25s ease;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 :root{--green:#123d32;--green2:#1e6a53;--mint:#dff4e9;--lime:#c6e86b;--cream:#f7f7f1;--ink:#1c2924;--muted:#68766f;--line:#dce5dd;--white:#fff;--orange:#f4a261;--shadow:0 12px 35px rgba(19,61,50,.08)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
 button,input,select,textarea{font:inherit}button{cursor:pointer}.topbar{position:sticky;top:0;z-index:20;background:rgba(247,247,241,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
@@ -19,8 +68,206 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.topbar{position
 .demo-pill{font-size:.72rem;letter-spacing:.06em;font-weight:850;background:#fff0d8;color:#875018;border:1px solid #f1d6a9;padding:6px 9px;border-radius:999px;white-space:nowrap}
 main{max-width:1200px;margin:auto;padding:28px 22px 70px}.view{display:none}.view.active{display:block}.hero{position:relative;overflow:hidden;border-radius:28px;background:var(--green);color:white;padding:clamp(28px,5vw,64px);display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center;min-height:360px}
 .hero:after{content:"";position:absolute;width:340px;height:340px;border:1px solid rgba(198,232,107,.3);border-radius:50%;right:-70px;top:-100px;box-shadow:0 0 0 35px rgba(198,232,107,.05),0 0 0 75px rgba(198,232,107,.04)}
-.eyebrow{font-size:.78rem;text-transform:uppercase;letter-spacing:.13em;font-weight:850;color:var(--lime)}h1{font-size:clamp(2.3rem,5vw,4.2rem);line-height:1.02;letter-spacing:-.055em;margin:14px 0 18px;max-width:700px}h2{font-size:clamp(1.55rem,3vw,2.2rem);letter-spacing:-.04em;margin:0 0 8px}h3{margin:0 0 8px;letter-spacing:-.02em}.hero p{max-width:570px;color:#d9e8df;font-size:1.05rem}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn-primary{background:var(--lime);color:var(--green)}.btn-light{background:white;color:var(--green)}.btn-outline{background:transparent;border:1px solid var(--line);color:var(--green)}.btn-dark{background:var(--green);color:white}.btn-small{padding:8px 11px;font-size:.87rem;border-radius:9px}.hero-art{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:330px;margin:auto}.art-tile{aspect-ratio:1;border-radius:24px;padding:17px;display:flex;flex-direction:column;justify-content:space-between;color:var(--green);font-weight:850}.art-tile span:first-child{font-size:2.3rem}.art-tile:nth-child(1){background:var(--lime)}.art-tile:nth-child(2){background:#e7c7a5;margin-top:24px}.art-tile:nth-child(3){background:#d5e8df;margin-top:-24px}.art-tile:nth-child(4){background:#fff}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}.stat,.panel,.card{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.stat{padding:18px}.stat .num{font-size:1.8rem;letter-spacing:-.05em;font-weight:900;color:var(--green)}.muted{color:var(--muted)}.small{font-size:.86rem}.section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:34px 0 16px}.section-head p{margin:0;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{padding:18px;display:flex;flex-direction:column;gap:11px;min-width:0}.material-icon{height:120px;border-radius:14px;background:linear-gradient(135deg,#e1f1e6,#f3f0d9);display:grid;place-items:center;font-size:3.1rem}.card-top{display:flex;justify-content:space-between;gap:8px;align-items:start}.tag{font-size:.72rem;font-weight:850;border-radius:999px;padding:5px 8px;background:var(--mint);color:var(--green);white-space:nowrap}.tag.limited{background:#fff0d8;color:#875018}.price{font-size:1.35rem;font-weight:900;color:var(--green)}.card-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}.toolbar{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:10px;margin:18px 0}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}.field label{font-weight:750;font-size:.9rem}.field input,.field select,.field textarea,.search-input{width:100%;border:1px solid #cfdad1;border-radius:11px;background:white;padding:11px 12px;color:var(--ink);outline:none}.field input:focus,.field select:focus,.field textarea:focus,.search-input:focus{border-color:var(--green2);box-shadow:0 0 0 3px rgba(30,106,83,.12)}.field textarea{min-height:95px;resize:vertical}.panel{padding:22px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}.chat-layout{display:grid;grid-template-columns:.75fr 1.25fr;gap:18px;align-items:stretch}.chat-intro{background:var(--green);color:white;border-radius:20px;padding:24px}.chat-intro p{color:#d9e8df}.suggestions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.suggestion{border:1px solid rgba(255,255,255,.3);color:white;background:rgba(255,255,255,.08);border-radius:999px;padding:8px 11px;text-align:left;font-size:.84rem}.chat-box{background:white;border:1px solid var(--line);border-radius:20px;display:flex;flex-direction:column;min-height:530px;overflow:hidden}.chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}.avatar{width:38px;height:38px;background:var(--mint);color:var(--green);display:grid;place-items:center;border-radius:13px;font-weight:900}.chat-head .status{font-size:.78rem;color:#287c55}.messages{padding:18px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;max-height:470px}.message{max-width:90%;padding:12px 14px;border-radius:15px;white-space:pre-wrap;font-size:.92rem}.message.bot{background:#f0f5ef;align-self:flex-start;border-bottom-left-radius:4px}.message.user{background:var(--green);color:white;align-self:flex-end;border-bottom-right-radius:4px}.chat-form{display:flex;gap:8px;padding:13px;border-top:1px solid var(--line)}.chat-form input{flex:1;min-width:0;border:1px solid var(--line);border-radius:11px;padding:12px}.listing-result{border:1px solid var(--line);background:white;padding:12px;border-radius:12px;margin-top:10px}.listing-result strong{color:var(--green)}.notice{background:#fff5df;border:1px solid #f0dfb6;color:#72551e;padding:12px 14px;border-radius:12px;font-size:.87rem}.success{background:#e7f6eb;border:1px solid #c7e7d0;color:#205e3b;padding:12px 14px;border-radius:12px;font-size:.9rem}.impact-hero{background:var(--mint);padding:28px;border-radius:20px;display:flex;align-items:center;justify-content:space-between;gap:18px}.impact-big{font-size:clamp(2.4rem,5vw,4rem);font-weight:950;letter-spacing:-.06em;color:var(--green)}.bar-list{display:grid;gap:13px;margin-top:18px}.bar-row{display:grid;grid-template-columns:120px 1fr 55px;align-items:center;gap:10px;font-size:.88rem}.bar{height:10px;background:#e6eee7;border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:var(--green2);border-radius:999px}.footer{border-top:1px solid var(--line);padding:24px 22px;color:var(--muted);font-size:.85rem;text-align:center}.empty{padding:28px;text-align:center;color:var(--muted);background:white;border:1px dashed var(--line);border-radius:14px}.hidden{display:none!important}.pill-row{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#edf4ee;border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:700;color:var(--green)}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:540px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:.9rem}th{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.eyebrow{font-size:.78rem;text-transform:uppercase;letter-spacing:.13em;font-weight:850;color:var(--lime)}h1{font-size:clamp(2.3rem,5vw,4.2rem);line-height:1.02;letter-spacing:-.055em;margin:14px 0 18px;max-width:700px}h2{font-size:clamp(1.55rem,3vw,2.2rem);letter-spacing:-.04em;margin:0 0 8px}h3{margin:0 0 8px;letter-spacing:-.02em}.hero p{max-width:570px;color:#d9e8df;font-size:1.05rem}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn-primary{background:var(--lime);color:var(--green)}.btn-light{background:white;color:var(--green)}.btn-outline{background:transparent;border:1px solid var(--line);color:var(--green)}.btn-dark{background:var(--green);color:white}.btn-small{padding:8px 11px;font-size:.87rem;border-radius:9px}
+.hero-art {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 390px;
+  margin: auto;
+}
+
+.art-tile {
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+  border: 1px solid #D8C5FF;
+  border-radius: 24px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #312E81;
+  font-weight: 850;
+  background: linear-gradient(145deg, #F8F5FF, #E9DEFF);
+  box-shadow: 0 8px 24px rgba(109, 40, 217, 0.09);
+  animation: tileFloat 4s ease-in-out infinite;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.art-tile span:first-child {
+  font-size: 2.7rem;
+  line-height: 1;
+}
+
+.art-tile span:last-child {
+  font-size: 0.95rem;
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+}
+
+.art-tile:nth-child(1) {
+  background: linear-gradient(145deg, #F0E7FF, #E2D1FF);
+  animation-delay: 0s;
+}
+
+.art-tile:nth-child(2) {
+  background: linear-gradient(145deg, #F0FFF7, #D7F3E5);
+  border-color: #C5EBD6;
+  margin-top: 16px;
+  animation-delay: 0.4s;
+}
+
+.art-tile:nth-child(3) {
+  background: linear-gradient(145deg, #FFF9EC, #FFEDC9);
+  border-color: #F5DFB2;
+  margin-top: -16px;
+  animation-delay: 0.8s;
+}
+
+.art-tile:nth-child(4) {
+  background: linear-gradient(145deg, #F5F0FF, #E3D8FF);
+  animation-delay: 1.2s;
+}
+
+.art-tile:hover {
+  transform: translateY(-6px) scale(1.025);
+  box-shadow: 0 16px 32px rgba(109, 40, 217, 0.17);
+}
+
+@keyframes tileFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-tile {
+    animation: none;
+    transition: none;
+  }
+}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}.stat,.panel,.card{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.stat{padding:18px}.stat .num{font-size:1.8rem;letter-spacing:-.05em;font-weight:900;color:var(--green)}.muted{color:var(--muted)}.small{font-size:.86rem}.section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:34px 0 16px}.section-head p{margin:0;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{padding:18px;display:flex;flex-direction:column;gap:11px;min-width:0}.material-icon{height:120px;border-radius:14px;background:linear-gradient(135deg,#e1f1e6,#f3f0d9);display:grid;place-items:center;font-size:3.1rem}.card-top{display:flex;justify-content:space-between;gap:8px;align-items:start}.tag{font-size:.72rem;font-weight:850;border-radius:999px;padding:5px 8px;background:var(--mint);color:var(--green);white-space:nowrap}.tag.limited{background:#fff0d8;color:#875018}.price{font-size:1.35rem;font-weight:900;color:var(--green)}.card-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}.toolbar{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:10px;margin:18px 0}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}.field label{font-weight:750;font-size:.9rem}.field input,.field select,.field textarea,.search-input{width:100%;border:1px solid #cfdad1;border-radius:11px;background:white;padding:11px 12px;color:var(--ink);outline:none}.field input:focus,.field select:focus,.field textarea:focus,.search-input:focus{border-color:var(--green2);box-shadow:0 0 0 3px rgba(30,106,83,.12)}.field textarea{min-height:95px;resize:vertical}.panel{padding:22px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}.chat-layout{display:grid;grid-template-columns:.75fr 1.25fr;gap:18px;align-items:stretch}.chat-intro{background:var(--green);color:white;border-radius:20px;padding:24px}.chat-intro p{color:#d9e8df}.suggestions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.suggestion{border:1px solid rgba(255,255,255,.3);color:white;background:rgba(255,255,255,.08);border-radius:999px;padding:8px 11px;text-align:left;font-size:.84rem}.chat-box{background:white;border:1px solid var(--line);border-radius:20px;display:flex;flex-direction:column;min-height:530px;overflow:hidden}.chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}.avatar{width:38px;height:38px;background:var(--mint);color:var(--green);display:grid;place-items:center;border-radius:13px;font-weight:900}.chat-head .status{font-size:.78rem;color:#287c55}.messages{padding:18px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;max-height:470px}.message{max-width:90%;padding:12px 14px;border-radius:15px;white-space:pre-wrap;font-size:.92rem}.message.bot{background:#f0f5ef;align-self:flex-start;border-bottom-left-radius:4px}.message.user{background:var(--green);color:white;align-self:flex-end;border-bottom-right-radius:4px}.chat-form{display:flex;gap:8px;padding:13px;border-top:1px solid var(--line)}.chat-form input{flex:1;min-width:0;border:1px solid var(--line);border-radius:11px;padding:12px}.listing-result{border:1px solid var(--line);background:white;padding:12px;border-radius:12px;margin-top:10px}.listing-result strong{color:var(--green)}.notice{background:#fff5df;border:1px solid #f0dfb6;color:#72551e;padding:12px 14px;border-radius:12px;font-size:.87rem}.success{background:#e7f6eb;border:1px solid #c7e7d0;color:#205e3b;padding:12px 14px;border-radius:12px;font-size:.9rem}
+/* Impact Dashboard — refreshed palette */
+.impact-hero {
+  background: linear-gradient(135deg, #E6D9FF, #F3EEFF);
+  color: #312E81;
+  padding: 28px;
+  border: 1px solid #4C478D;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.impact-hero p,
+.impact-hero .muted {
+  color: #E4E0FF;
+}
+
+
+.impact-big {
+  display: inline-block;
+  font-size: clamp(3rem, 6vw, 4.8rem);
+  font-weight: 950;
+  letter-spacing: -0.06em;
+  line-height: 1.1;
+  color: #6D28D9;
+  background: linear-gradient(135deg, #E6D9FF, #F3EEFF);
+  border: 1px solid #C4B5FD;
+  border-radius: 16px;
+  padding: 8px 18px;
+  box-shadow: 0 6px 20px rgba(109, 40, 217, 0.16);
+}
+
+/* Inventory category panel — lavender theme */
+#impactStats ~ .two-col .panel,
+#impactExtraStats ~ .two-col .panel {
+  background: #FAF8FF;
+  border: 1px solid #D8CCF5;
+  border-radius: 20px;
+  box-shadow: 0 8px 22px rgba(109, 40, 217, 0.08);
+}
+
+#impactStats ~ .two-col .panel h3,
+#impactExtraStats ~ .two-col .panel h3 {
+  color: #4C1D95;
+}
+
+/* Category labels and values */
+.bar-row {
+  color: #312E81;
+  font-weight: 650;
+}
+
+/* Empty-state messages */
+.empty {
+  background: #F3EEFF;
+  border-color: #C4B5FD;
+  border-radius: 16px;
+}
+
+
+/* Dashboard metric cards */
+#impactStats .stat,
+#impactExtraStats .stat {
+  background: #F3EEFF;
+  border: 1px solid #D8CCF5;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(49, 46, 129, 0.08);
+}
+
+
+/* Highlight the Potential Reuse metric */
+#impactExtraStats .stat:has(.num) {
+  background: linear-gradient(135deg, #E6D9FF, #F3EEFF);
+  border: 1px solid #B9A0F8;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.16);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#impactExtraStats .stat:has(.num):hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.24);
+}
+
+#impactExtraStats .stat .num {
+  color: #6D28D9;
+  font-size: 2.2rem;
+  font-weight: 950;
+}
+
+
+#impactStats .stat .num,
+#impactExtraStats .stat .num {
+  color: #312E81;
+}
+
+/* Inventory category panels */
+#impactStats .panel,
+#impactExtraStats .panel,
+#impactStats + .two-col .panel {
+  background: #FAF8FF;
+  border: 1px solid #D8CCF5;
+  border-radius: 18px;
+}
+.bar-list{display:grid;gap:13px;margin-top:18px}.bar-row{display:grid;grid-template-columns:120px 1fr 55px;align-items:center;gap:10px;font-size:.88rem}
+.bar {
+  height: 10px;
+  background: #E6D9FF;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #C4B5FD, #8B5CF6);
+  border-radius: 999px;
+}
+.footer{border-top:1px solid var(--line);padding:24px 22px;color:var(--muted);font-size:.85rem;text-align:center}.empty{padding:28px;text-align:center;color:var(--muted);background:white;border:1px dashed var(--line);border-radius:14px}.hidden{display:none!important}.pill-row{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#edf4ee;border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:700;color:var(--green)}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:540px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:.9rem}th{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
 @media(max-width:900px){.hero{grid-template-columns:1fr}.hero-art{display:none}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.chat-layout{grid-template-columns:1fr}.chat-intro{padding:18px}.chat-box{min-height:470px}.toolbar{grid-template-columns:1fr 1fr}.two-col{grid-template-columns:1fr}}
 @media(max-width:580px){.nav{align-items:flex-start;flex-wrap:wrap}.navlinks{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap}.navlinks button{white-space:nowrap}.demo-pill{margin-left:auto}main{padding:18px 13px 50px}.hero{padding:26px 21px;border-radius:20px}.stats{gap:9px}.stat{padding:13px}.stat .num{font-size:1.5rem}.grid{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr 1fr}.toolbar .search-span{grid-column:1/-1}.section-head{align-items:start;flex-direction:column}.impact-hero{align-items:start;flex-direction:column}.bar-row{grid-template-columns:95px 1fr 40px}.chat-box{min-height:490px}.message{max-width:96%}}
 
@@ -53,6 +300,51 @@ main{max-width:1200px;margin:auto;padding:28px 22px 70px}.view{display:none}.vie
   padding: 12px;
   width: fit-content;
 }
+
+
+/* Marketplace material photo cards */
+.material-card {
+  padding: 12px;
+  overflow: hidden;
+}
+
+.material-photo {
+  height: 190px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #e1f1e6, #f3f0d9);
+}
+
+.material-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+}
+
+.photo-category {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  background: white;
+  color: var(--green);
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  box-shadow: var(--shadow);
+}
+
 
 .map-filter-area {
   margin-bottom: 18px;
@@ -161,6 +453,1797 @@ main{max-width:1200px;margin:auto;padding:28px 22px 70px}.view{display:none}.vie
   box-shadow: 0 0 0 3px rgba(0, 180, 120, 0.18);
   transform: translateY(-3px);
 }
+
+/* ===== UMB VISUAL UPGRADE ===== */
+
+/* Smooth page entrance */
+.view.active {
+  animation: umbPageIn 0.45s ease both;
+}
+
+@keyframes umbPageIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* More noticeable card interactions */
+main .card {
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
+}
+
+main .card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 18px 36px rgba(18, 61, 50, 0.14);
+  border-color: #9bbfa9;
+}
+
+/* Polished buttons */
+.btn {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 16px rgba(18, 61, 50, 0.14);
+  filter: brightness(1.03);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* Cleaner navigation */
+.navlinks button {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Refined form controls */
+.field input,
+.field select,
+.field textarea,
+.search-input {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* A subtle highlight around the hero */
+.hero {
+  box-shadow: 0 18px 45px rgba(18, 61, 50, 0.12);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .view.active {
+    animation: none;
+  }
+
+  main .card,
+  .btn,
+  .navlinks button {
+    transition: none;
+  }
+
+  main .card:hover,
+  .btn:hover {
+    transform: none;
+  }
+}
+
+/* ===== UMB PREMIUM HERO UPGRADE ===== */
+
+.hero {
+  background:
+    radial-gradient(circle at 85% 20%, rgba(198, 232, 107, 0.16), transparent 28%),
+    radial-gradient(circle at 10% 100%, rgba(74, 145, 111, 0.28), transparent 38%),
+    linear-gradient(135deg, #103b30 0%, #174f3e 55%, #1d6049 100%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 22px 55px rgba(18, 61, 50, 0.17);
+}
+
+.hero-art {
+  filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.12));
+}
+
+.art-tile {
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.art-tile:hover {
+  transform: translateY(-6px) rotate(-1deg);
+  box-shadow: 0 14px 24px rgba(0, 0, 0, 0.13);
+}
+
+.hero h1 {
+  text-wrap: balance;
+}
+
+.hero p {
+  line-height: 1.8;
+}
+
+.hero .btn-primary {
+  box-shadow: 0 5px 18px rgba(198, 232, 107, 0.15);
+}
+
+.hero .btn-primary:hover {
+  box-shadow: 0 8px 25px rgba(198, 232, 107, 0.25);
+}
+
+/* ===== PREMIUM MATERIAL MARKETPLACE CARDS ===== */
+
+main .card {
+  border: 1px solid #e1e9e1;
+  border-radius: 20px;
+  box-shadow: 0 5px 18px rgba(18, 61, 50, 0.045);
+  transition: transform 0.28s ease,
+              box-shadow 0.28s ease,
+              border-color 0.28s ease;
+}
+
+main .card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 34px rgba(18, 61, 50, 0.12);
+  border-color: #a9cbb4;
+}
+
+main .material-icon {
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 80% 15%, rgba(198, 232, 107, 0.35), transparent 32%),
+    linear-gradient(135deg, #e1f1e6, #f5f2df);
+  transition: background 0.3s ease;
+}
+
+main .card h3 {
+  color: #173f32;
+  line-height: 1.3;
+}
+
+main .price {
+  letter-spacing: -0.04em;
+}
+
+main .tag {
+  letter-spacing: 0.02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main .card,
+  main .material-icon {
+    transition: none;
+  }
+
+  main .card:hover {
+    transform: none;
+  }
+}
+
+/* ===== UMB COLOURFUL VISUAL UPGRADE ===== */
+
+/* More colourful page background */
+body {
+  background:
+    radial-gradient(ellipse at 5% 12%, rgba(198, 232, 107, 0.13), transparent 28%),
+    radial-gradient(ellipse at 95% 40%, rgba(155, 190, 255, 0.12), transparent 25%),
+    #f8f8f2;
+}
+
+/* Brighter hero accents */
+.hero {
+  background:
+    radial-gradient(circle at 85% 18%, rgba(255, 190, 120, 0.25), transparent 25%),
+    radial-gradient(circle at 15% 95%, rgba(100, 210, 165, 0.25), transparent 32%),
+    linear-gradient(135deg, #123d32, #17644c 65%, #248064);
+}
+
+/* Give each hero tile its own personality */
+.art-tile:nth-child(1) {
+  background: linear-gradient(145deg, #d8f58b, #b8e65e);
+}
+
+.art-tile:nth-child(2) {
+  background: linear-gradient(145deg, #ffd7b0, #f4ad7b);
+}
+
+.art-tile:nth-child(3) {
+  background: linear-gradient(145deg, #bdebd9, #8bd7bd);
+}
+
+.art-tile:nth-child(4) {
+  background: linear-gradient(145deg, #e1d6ff, #c7b5fa);
+}
+
+/* Colourful marketplace cards */
+main .card {
+  background: linear-gradient(160deg, #ffffff 75%, #f0f8f1);
+  border-color: #dce9df;
+}
+
+main .card:nth-child(4n+2) {
+  background: linear-gradient(160deg, #ffffff 72%, #fff2e6);
+}
+
+main .card:nth-child(4n+3) {
+  background: linear-gradient(160deg, #ffffff 72%, #edf3ff);
+}
+
+main .card:nth-child(4n+4) {
+  background: linear-gradient(160deg, #ffffff 72%, #f3edff);
+}
+
+/* More colourful material icon panels */
+main .card:nth-child(4n+1) .material-icon {
+  background: linear-gradient(135deg, #ddf5df, #c3eacb);
+}
+
+main .card:nth-child(4n+2) .material-icon {
+  background: linear-gradient(135deg, #ffe5cb, #ffd0a6);
+}
+
+main .card:nth-child(4n+3) .material-icon {
+  background: linear-gradient(135deg, #dceaff, #c4d8ff);
+}
+
+main .card:nth-child(4n+4) .material-icon {
+  background: linear-gradient(135deg, #eee2ff, #d9c7ff);
+}
+
+/* Colourful stat cards */
+.stat:nth-child(4n+1) {
+  background: linear-gradient(145deg, #ffffff, #e5f6e9);
+}
+
+.stat:nth-child(4n+2) {
+  background: linear-gradient(145deg, #ffffff, #fff0df);
+}
+
+.stat:nth-child(4n+3) {
+  background: linear-gradient(145deg, #ffffff, #e7efff);
+}
+
+.stat:nth-child(4n+4) {
+  background: linear-gradient(145deg, #ffffff, #f1e8ff);
+}
+
+/* Softer, more colourful buttons */
+.btn-primary {
+  background: #c6e86b;
+}
+
+.btn-primary:hover {
+  background: #d4f28a;
+}
+
+.tag {
+  background: #dff4e9;
+}
+
+.tag.limited {
+  background: #ffe6c9;
+  color: #8b4b16;
+}
+
+/* ===== EXPLORE MATERIALS: MARKETPLACE REDESIGN ===== */
+
+#market {
+  --market-green: #175943;
+  --market-orange: #f3a66f;
+  --market-blue: #8ebaf5;
+  --market-purple: #c2a8f5;
+}
+
+/* Give the marketplace its own visual identity */
+#market .section-head {
+  padding: 25px 26px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 90% 0%, rgba(255, 199, 140, .45), transparent 30%),
+    linear-gradient(120deg, #e1f5e7, #f4f0ff 65%, #fff0df);
+  border: 1px solid #dce9df;
+  margin-top: 8px;
+  margin-bottom: 22px;
+}
+
+#market .section-head h2 {
+  color: #164b39;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+#market .section-head p {
+  color: #5e7067;
+  margin-top: 7px;
+}
+
+/* Make the search and filter area look like a proper toolbar */
+#market .toolbar {
+  padding: 16px;
+  border-radius: 18px;
+  background: white;
+  border: 1px solid #e1e8df;
+  box-shadow: 0 8px 24px rgba(23, 89, 67, .06);
+  margin-bottom: 22px;
+  gap: 12px;
+}
+
+#market .search-input {
+  border: 1px solid #d8e4da;
+  border-radius: 12px;
+  background: #fbfdf9;
+  padding: 12px 13px;
+  min-height: 46px;
+}
+
+#market .search-input:focus {
+  outline: none;
+  border-color: #4eaa7d;
+  box-shadow: 0 0 0 3px rgba(78, 170, 125, .15);
+}
+
+/* More colourful individual listing cards */
+#market .material-card {
+  padding: 12px;
+  border: 1px solid #e0e8df;
+  border-radius: 22px;
+  background: white;
+  box-shadow: 0 8px 22px rgba(24, 65, 49, .07);
+  overflow: hidden;
+}
+
+#market .material-card:nth-child(4n+1) {
+  border-top: 4px solid #6cba8b;
+}
+
+#market .material-card:nth-child(4n+2) {
+  border-top: 4px solid #f3a66f;
+}
+
+#market .material-card:nth-child(4n+3) {
+  border-top: 4px solid #8ebaf5;
+}
+
+#market .material-card:nth-child(4n+4) {
+  border-top: 4px solid #c2a8f5;
+}
+
+#market .material-photo {
+  height: 205px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #dff4e8, #fff0d9, #e9e2ff);
+}
+
+#market .photo-fallback {
+  font-size: 4.2rem;
+  background:
+    radial-gradient(circle at 75% 20%, rgba(255,255,255,.7), transparent 30%),
+    linear-gradient(135deg, #dff4e8, #e9e2ff);
+}
+
+#market .photo-category {
+  background: #fff;
+  color: #175943;
+  border: 1px solid rgba(23, 89, 67, .1);
+  padding: 7px 11px;
+}
+
+/* Clearer titles and prices */
+#market .material-card h3 {
+  color: #174b38;
+  font-size: 1.08rem;
+  margin-bottom: 5px;
+}
+
+#market .material-card .price {
+  color: #176849;
+  font-size: 1.55rem;
+  padding: 10px 12px;
+  background: #eaf7ed;
+  border-radius: 12px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+#market .material-card .tag {
+  background: #e2f5e9;
+  color: #236b49;
+}
+
+#market .material-card .tag.limited {
+  background: #fff0dd;
+  color: #99551e;
+}
+
+#market .material-card .pill {
+  background: #f0eaff;
+  color: #6546a0;
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+
+/* Better hover effect */
+#market .material-card {
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+#market .material-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 17px 32px rgba(24, 65, 49, .13);
+}
+
+#market .material-photo img {
+  transition: transform .4s ease;
+}
+
+#market .material-card:hover .material-photo img {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #market .material-card,
+  #market .material-photo img {
+    transition: none;
+  }
+
+  #market .material-card:hover,
+  #market .material-card:hover .material-photo img {
+    transform: none;
+  }
+}
+
+/* ===== MARKETPLACE CARD DETAILS UPGRADE ===== */
+
+#market .material-card {
+  gap: 14px;
+}
+
+#market .material-card .card-top {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+#market .material-card .muted.small {
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+#market .material-card .pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+#market .material-card .price {
+  display: inline-block;
+  line-height: 1.4;
+}
+
+#market .material-card .card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+  margin-top: auto;
+  border-top: 1px solid #edf0e9;
+}
+
+#market .material-card .card-actions .btn {
+  flex: 1 1 auto;
+  min-height: 40px;
+  border-radius: 11px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+#market .material-card .card-actions .btn-dark {
+  background: linear-gradient(135deg, #175943, #25815e);
+  box-shadow: 0 4px 10px rgba(23, 89, 67, .12);
+}
+
+#market .material-card .card-actions .btn-outline {
+  border: 1px solid #cbded0;
+  background: #f5faf5;
+}
+
+#market .material-card .card-actions .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(23, 89, 67, .13);
+}
+
+#market #resultCount {
+  padding: 12px 15px;
+  background: #e8f5eb;
+  color: #285e43;
+  border-radius: 12px;
+  border: 1px solid #d4e9d9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #market .material-card .card-actions .btn {
+    transition: none;
+  }
+
+  #market .material-card .card-actions .btn:hover {
+    transform: none;
+  }
+}
+
+
+/* ===== UMB MIDNIGHT MODE ===== */
+html[data-theme="midnight"] {
+  --green: #a5b4fc;
+  --green2: #60a5fa;
+  --mint: #202e45;
+  --lime: #93c5fd;
+  --cream: #101827;
+  --ink: #e5edf8;
+  --muted: #a6b4c9;
+  --line: #34445d;
+  --white: #1b2638;
+  --orange: #f4b183;
+  --shadow: 0 12px 35px rgba(0, 0, 0, .22);
+  color-scheme: dark;
+}
+
+html[data-theme="midnight"] body {
+  background: #101827;
+  color: #e5edf8;
+}
+
+html[data-theme="midnight"] .material-card,
+html[data-theme="midnight"] .card,
+html[data-theme="midnight"] .toolbar,
+html[data-theme="midnight"] .stat {
+  background-color: #1b2638;
+  color: #e5edf8;
+  border-color: #34445d;
+}
+
+html[data-theme="midnight"] input,
+html[data-theme="midnight"] select,
+html[data-theme="midnight"] textarea {
+  background: #151f30;
+  color: #e5edf8;
+  border-color: #40516a;
+}
+
+html[data-theme="midnight"] input::placeholder,
+html[data-theme="midnight"] textarea::placeholder {
+  color: #a6b4c9;
+}
+
+html[data-theme="midnight"] .muted,
+html[data-theme="midnight"] .small {
+  color: #a6b4c9;
+}
+
+html[data-theme="midnight"] .section-head,
+html[data-theme="midnight"] .hero,
+html[data-theme="midnight"] .notice {
+  background: #1b2638;
+  color: #e5edf8;
+  border-color: #34445d;
+}
+
+html[data-theme="midnight"] .material-card .price {
+  background: #203752;
+  color: #bfdbfe;
+}
+
+html[data-theme="midnight"] .material-card .pill,
+html[data-theme="midnight"] .material-card .tag {
+  background: #26364d;
+  color: #c7d9f5;
+}
+
+html[data-theme="midnight"] .material-card .card-actions {
+  border-color: #34445d;
+}
+
+html[data-theme="midnight"] .btn-outline {
+  color: #bfdbfe;
+  border-color: #536783;
+  background: #202e45;
+}
+
+html[data-theme="midnight"] .nav,
+html[data-theme="midnight"] nav {
+  background-color: #151f30;
+  color: #e5edf8;
+  border-color: #34445d;
+}
+
+html[data-theme="midnight"] a {
+  color: #93c5fd;
+}
+
+html {
+  transition: background-color .2s ease, color .2s ease;
+}
+
+
+/* ===== MIDNIGHT MODE: TEXT READABILITY FIX ===== */
+html[data-theme="midnight"] body {
+  color: #edf4ff;
+}
+
+html[data-theme="midnight"] h1,
+html[data-theme="midnight"] h2,
+html[data-theme="midnight"] h3,
+html[data-theme="midnight"] h4,
+html[data-theme="midnight"] label,
+html[data-theme="midnight"] strong,
+html[data-theme="midnight"] b,
+html[data-theme="midnight"] .section-head h2,
+html[data-theme="midnight"] .material-card h3 {
+  color: #edf4ff;
+}
+
+html[data-theme="midnight"] p,
+html[data-theme="midnight"] li,
+html[data-theme="midnight"] span,
+html[data-theme="midnight"] .muted,
+html[data-theme="midnight"] .small {
+  color: #c4d0e2;
+}
+
+html[data-theme="midnight"] button:not(.btn-dark),
+html[data-theme="midnight"] .btn-outline {
+  color: #edf4ff;
+}
+
+html[data-theme="midnight"] .navlinks button {
+  color: #d6e3f5;
+}
+
+html[data-theme="midnight"] .navlinks button.active {
+  background: #263b56;
+  color: #ffffff;
+}
+
+html[data-theme="midnight"] .material-card .price {
+  color: #bfdbfe;
+}
+
+html[data-theme="midnight"] .material-card .tag,
+html[data-theme="midnight"] .material-card .pill {
+  color: #e0eaff;
+  border-color: #405573;
+}
+
+html[data-theme="midnight"] input,
+html[data-theme="midnight"] select,
+html[data-theme="midnight"] textarea {
+  color: #f1f5f9;
+  background: #151f30;
+}
+
+html[data-theme="midnight"] option {
+  color: #f1f5f9;
+  background: #151f30;
+}
+
+html[data-theme="midnight"] a {
+  color: #93c5fd;
+}
+
+
+/* ===== UMB HOMEPAGE: MIDNIGHT + LAVENDER + TEAL ===== */
+
+#home {
+  --home-bg: #101827;
+  --home-panel: #1b2638;
+  --home-lavender: #c4b5fd;
+  --home-teal: #5eead4;
+  --home-text: #edf4ff;
+  --home-muted: #c4d0e2;
+  background: var(--home-bg);
+  color: var(--home-text);
+  border-radius: 24px;
+  padding: 22px;
+}
+
+#home .hero {
+  background:
+    radial-gradient(ellipse at 90% 5%, rgba(196,181,253,.18), transparent 35%),
+    radial-gradient(ellipse at 10% 100%, rgba(94,234,212,.13), transparent 38%),
+    linear-gradient(135deg, #17243a, #202540 65%, #182d3c);
+  border: 1px solid #34445d;
+  border-radius: 24px;
+  padding: clamp(24px, 5vw, 52px);
+  color: var(--home-text);
+  box-shadow: 0 18px 45px rgba(0,0,0,.2);
+}
+
+#home .hero .eyebrow {
+  color: var(--home-teal);
+  letter-spacing: .12em;
+}
+
+#home .hero h1 {
+  color: var(--home-text);
+}
+
+#home .hero p {
+  color: var(--home-muted);
+  line-height: 1.8;
+}
+
+#home .hero .btn-primary {
+  background: linear-gradient(135deg, #5eead4, #99f6e4);
+  color: #102b32;
+  border: none;
+}
+
+#home .hero .btn-light {
+  background: #c4b5fd;
+  color: #211b3d;
+  border: none;
+}
+
+#home .hero .btn {
+  border-radius: 12px;
+  font-weight: 700;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+#home .hero .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.2);
+}
+
+#home .hero .btn:focus-visible {
+  outline: 3px solid #5eead4;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home .hero .btn {
+    transition: none;
+  }
+  #home .hero .btn:hover {
+    transform: none;
+  }
+}
+
+
+/* ===== HOMEPAGE FEATURE LABELS: BRIGHTER COLORS ===== */
+#home {
+  --home-teal: #5eead4;
+  --home-lavender: #ddd6fe;
+}
+
+#home .hero strong,
+#home .hero b {
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(94, 234, 212, 0.35);
+}
+
+#home .hero .eyebrow {
+  color: #5eead4;
+  text-shadow: 0 0 12px rgba(94, 234, 212, 0.35);
+}
+
+#home .hero .feature,
+#home .hero .feature-label {
+  color: #e9e3ff;
+  font-weight: 800;
+  text-shadow: 0 0 12px rgba(196, 181, 253, 0.45);
+}
+
+#home .hero .feature span,
+#home .hero .feature-label span {
+  color: #5eead4;
+}
+
+
+/* ===== UMB EXPLORE MATERIALS: MATCH HOMEPAGE PALETTE ===== */
+
+html:not([data-theme="midnight"]) #market {
+  background: #F0F3FA;
+  color: #101827;
+  border-radius: 24px;
+  padding: 22px;
+}
+
+html:not([data-theme="midnight"]) #market .section-head {
+  background: linear-gradient(135deg, #101827, #202540);
+  color: #F8FAFC;
+  border: 1px solid #34445D;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+html:not([data-theme="midnight"]) #market .section-head h2 {
+  color: #F8FAFC;
+}
+
+html:not([data-theme="midnight"]) #market .section-head p {
+  color: #CBD5E1;
+}
+
+html:not([data-theme="midnight"]) #market .section-head .eyebrow {
+  color: #5EEAD4 !important;
+}
+
+html:not([data-theme="midnight"]) #market .section-head .btn-dark {
+  background: #A78BFA;
+  color: #17152B;
+  border: 1px solid #C4B5FD;
+}
+
+html:not([data-theme="midnight"]) #market .toolbar {
+  background: #FFFFFF;
+  border: 1px solid #D8DFED;
+  border-radius: 16px;
+  padding: 14px;
+  gap: 12px;
+}
+
+html:not([data-theme="midnight"]) #market .toolbar input,
+html:not([data-theme="midnight"]) #market .toolbar select {
+  background: #F8FAFC;
+  color: #101827;
+  border: 1px solid #CBD5E1;
+  border-radius: 10px;
+}
+
+html:not([data-theme="midnight"]) #market .toolbar input:focus,
+html:not([data-theme="midnight"]) #market .toolbar select:focus {
+  outline: 2px solid #A78BFA;
+  outline-offset: 2px;
+}
+
+html:not([data-theme="midnight"]) #market #resultCount {
+  color: #59677D;
+}
+
+
+/* ===== EXPLORE MATERIALS: REMOVE OLD GREEN TINTS ===== */
+
+html:not([data-theme="midnight"]) #market .eyebrow {
+  color: #A78BFA !important;
+}
+
+html:not([data-theme="midnight"]) #market .btn-primary {
+  background: #5EEAD4;
+  color: #101827;
+  border-color: #5EEAD4;
+}
+
+html:not([data-theme="midnight"]) #market .tag,
+html:not([data-theme="midnight"]) #market .pill {
+  background: #EEE9FF;
+  color: #5B43A8;
+  border-color: #D8CCFF;
+}
+
+html:not([data-theme="midnight"]) #market .price {
+  background: #E5EAF5;
+  color: #101827;
+}
+
+html:not([data-theme="midnight"]) #market .muted {
+  color: #59677D;
+}
+
+
+/* ===== UMB MITRA: MIDNIGHT + LAVENDER + TEAL ===== */
+
+html:not([data-theme="midnight"]) #mitra {
+  background: #F0F3FA;
+  color: #101827;
+  border-radius: 24px;
+  padding: 22px;
+}
+
+html:not([data-theme="midnight"]) #mitra .section-head {
+  background: linear-gradient(135deg, #101827, #202540);
+  color: #F8FAFC;
+  border: 1px solid #34445D;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+html:not([data-theme="midnight"]) #mitra .section-head h2 {
+  color: #F8FAFC;
+}
+
+html:not([data-theme="midnight"]) #mitra .section-head p {
+  color: #CBD5E1;
+}
+
+html:not([data-theme="midnight"]) #mitra .section-head .eyebrow {
+  color: #5EEAD4 !important;
+}
+
+html:not([data-theme="midnight"]) #mitra .chat-intro {
+  background: #101827;
+  color: #F8FAFC;
+  border: 1px solid #34445D;
+  border-radius: 20px;
+  padding: 24px;
+}
+
+html:not([data-theme="midnight"]) #mitra .chat-intro h2,
+html:not([data-theme="midnight"]) #mitra .chat-intro h3 {
+  color: #DDD6FE;
+}
+
+html:not([data-theme="midnight"]) #mitra .chat-intro p {
+  color: #CBD5E1;
+}
+
+html:not([data-theme="midnight"]) #mitra .chat-intro .eyebrow {
+  color: #5EEAD4;
+}
+
+html:not([data-theme="midnight"]) #mitra .suggestion {
+  background: #25233D;
+  color: #E9E3FF;
+  border: 1px solid #6555A8;
+  border-radius: 10px;
+}
+
+html:not([data-theme="midnight"]) #mitra .suggestion:hover {
+  background: #A78BFA;
+  color: #101827;
+  border-color: #A78BFA;
+}
+
+html:not([data-theme="midnight"]) #mitra .chat-box {
+  background: #FFFFFF;
+  color: #101827;
+  border: 1px solid #D5DEEA;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+html:not([data-theme="midnight"]) #mitra .chat-head {
+  background: #101827;
+  color: #F8FAFC;
+  border-color: #34445D;
+}
+
+html:not([data-theme="midnight"]) #mitra .chat-head strong {
+  color: #FFFFFF;
+}
+
+html:not([data-theme="midnight"]) #mitra .chat-head .status {
+  color: #5EEAD4;
+}
+
+html:not([data-theme="midnight"]) #mitra .avatar {
+  background: #A78BFA;
+  color: #101827;
+}
+
+html:not([data-theme="midnight"]) #mitra .chat-form {
+  background: #F0F3FA;
+  border-color: #D5DEEA;
+}
+
+html:not([data-theme="midnight"]) #mitra #chatInput {
+  background: #FFFFFF;
+  color: #101827;
+  border-color: #CBD5E1;
+}
+
+html:not([data-theme="midnight"]) #mitra .chat-form .btn-dark {
+  background: #5EEAD4;
+  color: #101827;
+  border-color: #5EEAD4;
+}
+
+
+/* ===== BENGALURU MAP: MATCH UMB PALETTE ===== */
+
+html:not([data-theme="midnight"]) #map {
+  background: #F0F3FA;
+  color: #101827;
+  border-radius: 24px;
+  padding: 22px;
+}
+
+html:not([data-theme="midnight"]) #map .section-head {
+  background: linear-gradient(135deg, #101827, #202540);
+  color: #F8FAFC;
+  border: 1px solid #34445D;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+html:not([data-theme="midnight"]) #map .section-head h2 {
+  color: #F8FAFC;
+}
+
+html:not([data-theme="midnight"]) #map .section-head p {
+  color: #CBD5E1;
+}
+
+html:not([data-theme="midnight"]) #map .section-head .eyebrow {
+  color: #5EEAD4 !important;
+}
+
+html:not([data-theme="midnight"]) #map .section-head .btn-dark {
+  background: #A78BFA;
+  color: #101827;
+  border: 1px solid #C4B5FD;
+}
+
+
+/* ===== FIND MY MATERIALS: MATCH UMB PALETTE ===== */
+
+html:not([data-theme="midnight"]) #materialMatcher {
+  background: #F0F3FA;
+  color: #101827;
+  border-radius: 24px;
+  padding: 22px;
+}
+
+html:not([data-theme="midnight"]) #materialMatcher .section-head {
+  background: linear-gradient(135deg, #101827, #202540);
+  color: #F8FAFC;
+  border: 1px solid #34445D;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+html:not([data-theme="midnight"]) #materialMatcher .section-head h2 {
+  color: #F8FAFC;
+}
+
+html:not([data-theme="midnight"]) #materialMatcher .section-head p {
+  color: #CBD5E1;
+}
+
+html:not([data-theme="midnight"]) #materialMatcher .section-head .eyebrow {
+  color: #5EEAD4 !important;
+}
+
+html:not([data-theme="midnight"]) #materialMatcher input,
+html:not([data-theme="midnight"]) #materialMatcher select,
+html:not([data-theme="midnight"]) #materialMatcher textarea {
+  background: #FFFFFF;
+  color: #101827;
+  border: 1px solid #CBD5E1;
+  border-radius: 10px;
+}
+
+html:not([data-theme="midnight"]) #materialMatcher input:focus,
+html:not([data-theme="midnight"]) #materialMatcher select:focus,
+html:not([data-theme="midnight"]) #materialMatcher textarea:focus {
+  outline: 2px solid #A78BFA;
+  outline-offset: 2px;
+}
+
+html:not([data-theme="midnight"]) #materialMatcher .btn-primary {
+  background: #5EEAD4;
+  color: #101827;
+  border-color: #5EEAD4;
+}
+
+html:not([data-theme="midnight"]) #materialMatcher .btn-dark {
+  background: #101827;
+  color: #F8FAFC;
+  border-color: #101827;
+}
+
+
+/* ===== FIND MY MATERIALS: POLISHED FORM LAYOUT ===== */
+
+html:not([data-theme="midnight"]) #materialMatcher form {
+  background: #FFFFFF;
+  border: 1px solid #D8DFED;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 12px 30px rgba(16, 24, 39, 0.06);
+}
+
+html:not([data-theme="midnight"]) #materialMatcher label {
+  color: #25314A;
+  font-weight: 600;
+}
+
+html:not([data-theme="midnight"]) #materialMatcher input,
+html:not([data-theme="midnight"]) #materialMatcher select {
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+html:not([data-theme="midnight"]) #materialMatcher .btn-primary {
+  background: linear-gradient(135deg, #5EEAD4, #99F6E4);
+  color: #101827;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-weight: 800;
+  box-shadow: 0 5px 14px rgba(43, 190, 173, 0.18);
+}
+
+
+/* ===== UMB BRAND: MIDNIGHT + LAVENDER + TEAL ===== */
+
+.brand {
+  gap: 12px;
+}
+
+.brand .brandmark {
+  background: linear-gradient(145deg, #101827, #25233D) !important;
+  color: #C4B5FD !important;
+  border: 1px solid #5EEAD4;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(16, 24, 39, 0.18);
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.brand > span {
+  color: #101827;
+  font-weight: 900;
+  letter-spacing: -0.7px;
+}
+
+html[data-theme="midnight"] .brand > span {
+  color: #EDF4FF;
+}
+
+
+/* ===== MATERIAL RESCUE: MATCH UMB PALETTE ===== */
+
+html:not([data-theme="midnight"]) #rescue {
+  background: #F0F3FA;
+  color: #101827;
+  border-radius: 24px;
+  padding: 22px;
+}
+
+html:not([data-theme="midnight"]) #rescue .section-head {
+  background: linear-gradient(135deg, #101827, #202540);
+  color: #F8FAFC;
+  border: 1px solid #34445D;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+html:not([data-theme="midnight"]) #rescue .section-head h2 {
+  color: #F8FAFC;
+}
+
+html:not([data-theme="midnight"]) #rescue .section-head p {
+  color: #CBD5E1;
+}
+
+html:not([data-theme="midnight"]) #rescue .section-head .eyebrow {
+  color: #5EEAD4 !important;
+}
+
+html:not([data-theme="midnight"]) #rescue .panel {
+  background: #FFFFFF;
+  color: #101827;
+  border: 1px solid #D8DFED;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 12px 30px rgba(16, 24, 39, 0.05);
+}
+
+html:not([data-theme="midnight"]) #rescue label {
+  color: #25314A;
+  font-weight: 600;
+}
+
+html:not([data-theme="midnight"]) #rescue input,
+html:not([data-theme="midnight"]) #rescue select,
+html:not([data-theme="midnight"]) #rescue textarea {
+  background: #F8FAFC;
+  color: #101827;
+  border: 1px solid #CBD5E1;
+  border-radius: 10px;
+}
+
+html:not([data-theme="midnight"]) #rescue input:focus,
+html:not([data-theme="midnight"]) #rescue select:focus,
+html:not([data-theme="midnight"]) #rescue textarea:focus {
+  outline: 2px solid #A78BFA;
+  outline-offset: 2px;
+}
+
+html:not([data-theme="midnight"]) #rescue .btn-primary {
+  background: linear-gradient(135deg, #5EEAD4, #99F6E4);
+  color: #101827;
+  border: none;
+  border-radius: 12px;
+  font-weight: 800;
+}
+
+html:not([data-theme="midnight"]) #rescue .btn-dark {
+  background: #101827;
+  color: #F8FAFC;
+  border-color: #101827;
+}
+
+
+/* ===== ACCOUNT LOGIN: SOFT LAVENDER ===== */
+
+html:not([data-theme="midnight"]) .auth-section,
+html:not([data-theme="midnight"]) .auth-container,
+html:not([data-theme="midnight"]) .account-section {
+  background: #F3EEFF;
+  border-color: #DDD2F8;
+  color: #101827;
+}
+
+html:not([data-theme="midnight"]) .auth-card,
+html:not([data-theme="midnight"]) .login-card,
+html:not([data-theme="midnight"]) .signup-card {
+  background: #FAF8FF;
+  border: 1px solid #DDD2F8;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(71, 55, 120, 0.08);
+  color: #101827;
+}
+
+html:not([data-theme="midnight"]) .auth-section input,
+html:not([data-theme="midnight"]) .auth-container input,
+html:not([data-theme="midnight"]) .account-section input {
+  background: #FFFFFF;
+  color: #101827;
+  border-color: #D8CCF5;
+}
+
+html:not([data-theme="midnight"]) .auth-section button,
+html:not([data-theme="midnight"]) .auth-container button,
+html:not([data-theme="midnight"]) .account-section button {
+  border-radius: 10px;
+}
+
+
+/* ===== UMB: SOFT LAVENDER LIGHT-MODE SURFACES ===== */
+
+html:not([data-theme="midnight"]) {
+  --white: #FAF8FF;
+}
+
+/* Main page backgrounds */
+html:not([data-theme="midnight"]) body,
+html:not([data-theme="midnight"]) .view {
+  background-color: #F3EEFF;
+}
+
+/* Common cards and content panels */
+html:not([data-theme="midnight"]) .card,
+html:not([data-theme="midnight"]) .panel,
+html:not([data-theme="midnight"]) .material-card,
+html:not([data-theme="midnight"]) .toolbar,
+html:not([data-theme="midnight"]) .stat,
+html:not([data-theme="midnight"]) .chat-box {
+  background-color: #FAF8FF;
+  border-color: #DDD2F8;
+}
+
+/* Form fields across the website */
+html:not([data-theme="midnight"]) input,
+html:not([data-theme="midnight"]) select,
+html:not([data-theme="midnight"]) textarea {
+  background-color: #FAF8FF;
+  color: #101827;
+  border-color: #D8CCF5;
+}
+
+/* Seller account form fields */
+html:not([data-theme="midnight"]) #sellerPassword {
+  background-color: #FAF8FF;
+  color: #101827;
+  border-color: #D8CCF5;
+}
+
+/* Keep text readable */
+html:not([data-theme="midnight"]) label {
+  color: #25314A;
+}
+
+
+/* UMB: lavender user account and enquiry cards */
+html:not([data-theme="midnight"]) #rescue .panel {
+  background-color: #F3EEFF !important;
+  border-color: #D8CCF5 !important;
+  color: #101827;
+}
+
+html:not([data-theme="midnight"]) #rescue .panel input {
+  background-color: #FAF8FF !important;
+  border-color: #C9B8F0 !important;
+  color: #101827 !important;
+}
+
+html:not([data-theme="midnight"]) #rescue .panel label,
+html:not([data-theme="midnight"]) #rescue .panel h3 {
+  color: #30234F;
+}
+
+
+/* UMB FINAL LAVENDER OVERRIDE — LIGHT MODE ONLY */
+html:not([data-theme="midnight"]) body {
+  background: #F3EEFF !important;
+}
+
+html:not([data-theme="midnight"]) .view.active {
+  background-color: #F3EEFF !important;
+}
+
+html:not([data-theme="midnight"]) .panel,
+html:not([data-theme="midnight"]) .card,
+html:not([data-theme="midnight"]) .stat,
+html:not([data-theme="midnight"]) .toolbar,
+html:not([data-theme="midnight"]) .chat-box,
+html:not([data-theme="midnight"]) .empty,
+html:not([data-theme="midnight"]) .listing-result {
+  background: #F3EEFF !important;
+  border-color: #D8CCF5 !important;
+}
+
+html:not([data-theme="midnight"]) #rescue .two-col > .panel,
+html:not([data-theme="midnight"]) #rescue .two-col > .panel > .panel {
+  background: #F3EEFF !important;
+  border-color: #D8CCF5 !important;
+}
+
+html:not([data-theme="midnight"]) input,
+html:not([data-theme="midnight"]) select,
+html:not([data-theme="midnight"]) textarea {
+  background: #FAF8FF !important;
+  color: #101827 !important;
+  border-color: #C9B8F0 !important;
+}
+
+
+
+/* UMB MATERIAL PASSPORTS */
+
+
+/* PREMIUM PASSPORT COLOUR PALETTE */
+
+/* PREMIUM PASSPORT PALETTE — MATCH ORIGINAL UMB */
+#passports {
+  --passport-ivory: #101827;
+  --passport-paper: #1B2638;
+  --passport-ink: #EDF4FF;
+  --passport-forest: #5EEAD4;
+  --passport-gold: #C4B5FD;
+  --passport-border: #354258;
+  color: var(--passport-ink);
+}
+
+#passports .passport-intro {
+  background: linear-gradient(120deg, #1B2638, #17243A);
+  border-color: #354258;
+}
+
+#passports .passport-intro-mark {
+  color: #5EEAD4;
+  border-color: #C4B5FD;
+}
+
+#passports .passport-card {
+  background: #1B2638;
+  border-color: #354258;
+}
+
+#passports .passport-card-head {
+  background: linear-gradient(145deg, #17243A, #202540);
+  border-bottom-color: #354258;
+}
+
+#passports .passport-kicker {
+  color: #5EEAD4;
+}
+
+#passports .passport-id {
+  border-top-color: #C4B5FD;
+}
+
+#passports .passport-facts,
+#passports .passport-fact {
+  border-color: #354258;
+}
+
+#passports .passport-card:hover {
+  border-color: #5EEAD4;
+  box-shadow: 0 15px 34px rgba(94, 234, 212, 0.09);
+}
+
+
+/* UMB MATERIAL PASSPORTS — PREMIUM EDITORIAL DESIGN */
+
+.passport-intro {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin: 30px 0;
+  padding: 34px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: linear-gradient(120deg, var(--card), var(--bg));
+  box-shadow: 0 12px 35px rgba(20, 35, 25, 0.06);
+}
+
+.passport-intro-mark {
+  flex: 0 0 104px;
+  min-height: 104px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--green2);
+  border-radius: 50%;
+  color: var(--green2);
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.passport-intro h3 {
+  margin: 0 0 10px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(23px, 3vw, 32px);
+  font-weight: 500;
+  letter-spacing: -0.6px;
+}
+
+.passport-intro p {
+  max-width: 620px;
+  margin: 0;
+  line-height: 1.8;
+}
+
+.passport-grid {
+  gap: 22px;
+  align-items: stretch;
+}
+
+.passport-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: 0 5px 20px rgba(20, 35, 25, 0.045);
+  transition: transform 180ms ease, box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.passport-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--green2);
+  box-shadow: 0 15px 34px rgba(20, 35, 25, 0.10);
+}
+
+.passport-card-head {
+  position: relative;
+  padding: 26px 24px 22px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(145deg, var(--bg), var(--card));
+}
+
+.passport-kicker {
+  display: inline-block;
+  color: var(--green2);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.passport-card-head h3 {
+  margin: 16px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(21px, 2vw, 27px);
+  font-weight: 500;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.passport-id {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  letter-spacing: 0.2px;
+}
+
+.passport-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.passport-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin: 8px 0 20px;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.passport-fact {
+  min-width: 0;
+  padding: 15px 12px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+
+.passport-fact span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.passport-fact strong {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.passport-card-body > p {
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.passport-card .card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.passport-card .card-actions .btn {
+  min-height: 40px;
+  letter-spacing: 0.2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .passport-card {
+    transition: none;
+  }
+
+  .passport-card:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .passport-intro {
+    align-items: flex-start;
+    gap: 16px;
+    margin: 20px 0;
+    padding: 20px;
+  }
+
+  .passport-intro-mark {
+    flex-basis: 64px;
+    min-height: 64px;
+    font-size: 10px;
+  }
+
+  .passport-intro h3 {
+    font-size: 21px;
+  }
+
+  .passport-card-head,
+  .passport-card-body {
+    padding: 20px;
+  }
+
+  .passport-fact {
+    padding: 12px 9px;
+  }
+
+  .passport-card .card-actions .btn {
+    flex: 1 1 auto;
+  }
+}
+
+/* MATERIAL PASSPORT BUTTON COLOURS */
+#passports .passport-card .card-actions .btn {
+  border-radius: 8px;
+  font-weight: 700;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+/* View Passport — lavender */
+#passports .passport-card .card-actions .btn:first-child {
+  background: #C4B5FD;
+  color: #101827;
+  border: 1px solid #C4B5FD;
+}
+
+/* View Marketplace — light lavender */
+#passports .passport-card .card-actions .btn:nth-child(2) {
+  background: #E5DEFF;
+  color: #101827;
+  border: 1px solid #E5DEFF;
+}
+
+/* Ask Mitra — teal */
+#passports .passport-card .card-actions .btn:nth-child(3) {
+  background: #5EEAD4;
+  color: #101827;
+  border: 1px solid #5EEAD4;
+}
+
+/* Hover effect */
+#passports .passport-card .card-actions .btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+
+/* MARKETPLACE BUTTON COLOURS */
+#market .card-actions .btn {
+  border-radius: 8px;
+  font-weight: 700;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+/* Ask Mitra — teal */
+#market .card-actions .btn:first-child {
+  background: #5EEAD4;
+  color: #101827;
+  border: 1px solid #5EEAD4;
+}
+
+/* Details — lavender */
+#market .card-actions .btn:nth-child(2) {
+  background: #C4B5FD;
+  color: #101827;
+  border: 1px solid #C4B5FD;
+}
+
+/* Enquire — light lavender */
+#market .card-actions .btn:nth-child(3) {
+  background: #E5DEFF;
+  color: #101827;
+  border: 1px solid #E5DEFF;
+}
+
+/* Hover effect */
+#market .card-actions .btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+
+/* MATERIAL RESCUE BUTTON COLOURS */
+
+/* Shared button styling */
+#rescue .btn {
+  border-radius: 8px;
+  font-weight: 700;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+/* Sign in and Create account — lavender */
+#rescue button[onclick*="signIn"],
+#rescue button[onclick*="createAccount"] {
+  background: #C4B5FD;
+  color: #101827;
+  border: 1px solid #C4B5FD;
+}
+
+/* Generate Recovery Checklist — teal */
+#rescue button[onclick*="recovery"],
+#rescue button[onclick*="Recovery"] {
+  background: #5EEAD4;
+  color: #101827;
+  border: 1px solid #5EEAD4;
+}
+
+/* Load Received Enquiries — light lavender */
+#rescue button[onclick*="enquir"],
+#rescue button[onclick*="Enquir"] {
+  background: #E5DEFF;
+  color: #101827;
+  border: 1px solid #E5DEFF;
+}
+
+/* Hover effect */
+#rescue .btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+
+/* MATERIAL RESCUE — Recovery Checklist button */
+#rescueForm button[type="submit"] {
+  background: #5EEAD4 !important;
+  color: #101827 !important;
+  border: 1px solid #5EEAD4 !important;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+#rescueForm button[type="submit"]:hover {
+  background: #78F2DF !important;
+  border-color: #78F2DF !important;
+}
+
+
+/* SELLER ACCOUNT BUTTONS */
+#sellerSignUp {
+  background: #C4B5FD !important;
+  color: #101827 !important;
+  border: 1px solid #C4B5FD !important;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+#sellerSignIn {
+  background: #E5DEFF !important;
+  color: #101827 !important;
+  border: 1px solid #E5DEFF !important;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+#sellerSignUp:hover,
+#sellerSignIn:hover {
+  filter: brightness(1.06);
+}
+
+
+/* LOAD RECEIVED ENQUIRIES — light lavender */
+#loadSellerEnquiries {
+  background: #E5DEFF !important;
+  color: #101827 !important;
+  border: 1px solid #E5DEFF !important;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+#loadSellerEnquiries:hover {
+  background: #F0ECFF !important;
+  border-color: #F0ECFF !important;
+}
+
+
 </style>
 </head>
 <body>
@@ -170,11 +2253,15 @@ main{max-width:1200px;margin:auto;padding:28px 22px 70px}.view{display:none}.vie
     <nav class="navlinks" aria-label="Main navigation">
       <button class="active" data-view="home">Home</button>
       <button data-view="market">Explore materials</button>
+      <button data-view="passports">Material Passports</button>
       <button data-view="mitra">UMB Mitra</button>
       <button data-view="map">Bengaluru Map</button>
       <button data-view="materialMatcher">Find My Materials</button>
       <button data-view="rescue">Material rescue</button>
       <button data-view="impact">Impact dashboard</button>
+      
+<button type="button" id="themeToggle" aria-pressed="false" title="Switch to midnight mode">☾ Midnight</button>
+
     </nav>
     <span class="demo-pill">● DEMO DATA</span>
   </div>
@@ -219,10 +2306,40 @@ main{max-width:1200px;margin:auto;padding:28px 22px 70px}.view{display:none}.vie
       <select id="sortFilter" class="search-input" aria-label="Sort listings"><option value="featured">Featured first</option><option value="priceAsc">Price: low to high</option><option value="priceDesc">Price: high to low</option><option value="quantityDesc">Quantity: high to low</option></select>
     </div>
     <div class="grid" id="materialGrid"></div>
+    
     <p class="muted small" id="resultCount" style="margin-top:14px"></p>
   </section>
 
+  <!-- MATERIAL PASSPORTS PAGE -->
+  <section class="view" id="passports">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow" style="color:var(--green2)">Material traceability</div>
+        <h2>Material Passports</h2>
+        <p>Explore the verified details and reuse history of reclaimed construction materials.</p>
+      </div>
+    </div>
+
+    <div class="passport-intro">
+      <div class="passport-intro-mark">UMB / MP</div>
+      <div>
+        <h3>Every material has a story.</h3>
+        <p class="muted">
+          Each passport is linked to a genuine seller listing. Material details
+          appear here when real listings are available.
+        </p>
+      </div>
+    </div>
+
+    <div id="passportGrid" class="grid passport-grid">
+      <div class="empty" style="grid-column:1/-1">
+        Loading genuine material listings…
+      </div>
+    </div>
+  </section>
+
   <section class="view" id="mitra">
+
     <div class="section-head"><div><div class="eyebrow" style="color:var(--green2)">Your circular construction assistant</div><h2>Meet UMB Mitra</h2><p>Tell Mitra what you need. It searches the sample inventory and explains the match.</p></div></div>
     <div class="chat-layout">
       <aside class="chat-intro">
@@ -284,25 +2401,49 @@ main{max-width:1200px;margin:auto;padding:28px 22px 70px}.view{display:none}.vie
       Select a material to highlight hubs that list it.
     </p>
 
-    <div id="mapMaterialFilters" class="map-filters">
-      <button class="map-filter active" data-material="All">🌍 All materials</button>
-      <button class="map-filter" data-material="Bricks">🧱 Bricks</button>
-      <button class="map-filter" data-material="Steel">🏗️ Steel</button>
-      <button class="map-filter" data-material="Timber">🪵 Timber</button>
-      <button class="map-filter" data-material="Doors">🚪 Doors</button>
-      <button class="map-filter" data-material="Tiles">🔷 Tiles</button>
-      <button class="map-filter" data-material="Granite">🪨 Granite</button>
-    </div>
-  </div>
-
-  <div id="warehouseMap"></div>
-
-  <div class="map-legend">
-    <span><i class="legend-dot green-dot"></i> Bricks & masonry</span>
-    <span><i class="legend-dot orange-dot"></i> Metal & steel</span>
-    <span><i class="legend-dot blue-dot"></i> Timber & fittings</span>
-  </div>
+    
+<div id="mapMaterialFilters" class="map-filters">
+  <button class="map-filter active" data-material="All">🌍 All materials</button>
+  <button class="map-filter" data-material="Bricks">🧱 Bricks</button>
+  <button class="map-filter" data-material="Steel">🏗️ Steel</button>
+  <button class="map-filter" data-material="Timber">🪵 Timber</button>
+  <button class="map-filter" data-material="Doors">🚪 Doors</button>
+  <button class="map-filter" data-material="Windows">🪟 Windows</button>
+  <button class="map-filter" data-material="Tiles">🔷 Tiles</button>
+  <button class="map-filter" data-material="Granite">🪨 Granite</button>
+  <button class="map-filter" data-material="Pavers">🧱 Pavers</button>
+  <button class="map-filter" data-material="Stone">🪨 Stone</button>
+  <button class="map-filter" data-material="Graphite">⚫ Graphite</button>
+  <button class="map-filter" data-material="Concrete">🏢 Concrete</button>
+  <button class="map-filter" data-material="Cement">🧱 Cement</button>
+  <button class="map-filter" data-material="Roofing">🏠 Roofing</button>
 </div>
+
+  </div>
+
+  
+<div class="map-material-filters">
+  <label for="mapMaterialFilter">Filter by material:</label>
+  <select id="mapMaterialFilter">
+    <option value="all">All materials</option>
+    <option value="bricks">Bricks</option>
+    <option value="steel">Steel</option>
+    <option value="timber">Timber</option>
+    <option value="doors">Doors</option>
+    <option value="windows">Windows</option>
+    <option value="tiles">Tiles</option>
+    <option value="granite">Granite</option>
+    <option value="pavers">Concrete pavers</option>
+    <option value="stone">Stone</option>
+    <option value="graphite">Graphite</option>
+    <option value="concrete">Concrete</option>
+    <option value="cement">Cement</option>
+    <option value="roofing">Roofing sheets</option>
+    <option value="other">Other materials</option>
+  </select>
+</div>
+
+
 
 
   <div class="section-head">
@@ -313,6 +2454,7 @@ main{max-width:1200px;margin:auto;padding:28px 22px 70px}.view{display:none}.vie
   </div>
 
   <div class="grid" id="warehouseCards"></div>
+  <div id="warehouseMap" style="height:460px; width:100%; margin-top:20px;"></div>
 
   <p class="notice" style="margin-top:18px">
     Demo notice: these are illustrative locations, not verified warehouses.
@@ -481,6 +2623,13 @@ main{max-width:1200px;margin:auto;padding:28px 22px 70px}.view{display:none}.vie
           <div class="field"><label for="rescueLocation">Location *</label><input id="rescueLocation" required placeholder="e.g. Bengaluru, Jayanagar"></div>
           <div class="field"><label for="rescueContext">Project context</label><select id="rescueContext"><option>Renovation</option><option>Demolition</option><option>Interior refit</option><option>Other</option></select></div>
           <div class="field"><label for="rescueNotes">Notes (optional)</label><textarea id="rescueNotes" placeholder="Dimensions, access, dismantling details..."></textarea></div>
+          
+<div class="field">
+  <label for="rescuePhotoUrl">Material photo URL (optional)</label>
+  <input id="rescuePhotoUrl" type="url" placeholder="https://example.com/your-material-photo.jpg">
+  <div class="muted small">Paste a direct, publicly accessible image link.</div>
+</div>
+
           <button class="btn btn-dark" type="submit">Generate recovery checklist ↗</button>
         </form>
       </div>
@@ -581,23 +2730,241 @@ main{max-width:1200px;margin:auto;padding:28px 22px 70px}.view{display:none}.vie
 <footer class="footer">UMB Circular Intelligence · Student prototype · Simulated listings only · SDG 11 + SDG 12</footer>
 
 <script>
-const materials = [
- {id:"MAT-001",name:"Reclaimed Red Clay Bricks",category:"Bricks",quantity:1000,unit:"pieces",price:8,priceUnit:"piece",condition:"Good",location:"Bengaluru",availability:"Available",icon:"🧱",description:"Reusable clay bricks for suitable construction projects."},
- {id:"MAT-002",name:"Reclaimed Teak Wood Door",category:"Doors",quantity:4,unit:"units",price:2500,priceUnit:"unit",condition:"Refurbished",location:"Bengaluru",availability:"Available",icon:"🚪",description:"Refurbished timber doors. Dimensions and fittings need confirmation."},
- {id:"MAT-003",name:"Reclaimed Steel Beams",category:"Steel",quantity:500,unit:"kg",price:45,priceUnit:"kg",condition:"Inspected",location:"Bengaluru",availability:"Available",icon:"🏗️",description:"Recovered steel beams requiring project-specific suitability checks."},
- {id:"MAT-004",name:"Reclaimed Ceramic Tiles",category:"Tiles",quantity:300,unit:"sq ft",price:18,priceUnit:"sq ft",condition:"Good",location:"Bengaluru",availability:"Available",icon:"▦",description:"Recovered ceramic tiles for suitable flooring applications."},
- {id:"MAT-005",name:"Reclaimed Wooden Window Frames",category:"Windows",quantity:8,unit:"units",price:900,priceUnit:"unit",condition:"Usable",location:"Bengaluru",availability:"Limited",icon:"🪟",description:"Reusable wooden frames; dimensions require confirmation."},
- {id:"MAT-006",name:"Reclaimed Concrete Pavers",category:"Pavers",quantity:200,unit:"pieces",price:12,priceUnit:"piece",condition:"Good",location:"Bengaluru",availability:"Available",icon:"🪨",description:"Recovered pavers for appropriate outdoor applications."},
- {id:"MAT-007",name:"Reclaimed Timber Planks",category:"Timber",quantity:150,unit:"board-feet",price:35,priceUnit:"board-foot",condition:"Usable",location:"Bengaluru",availability:"Available",icon:"🪵",description:"Recovered timber for suitable furniture or interior projects."},
- {id:"MAT-008",name:"Reclaimed Granite Slabs",category:"Stone",quantity:80,unit:"sq ft",price:55,priceUnit:"sq ft",condition:"Inspected",location:"Bengaluru",availability:"Limited",icon:"⬛",description:"Recovered granite slabs; thickness and dimensions require confirmation."}
-];
+const materials = [];
 const $ = id => document.getElementById(id);
 const money = n => "₹" + Number(n).toLocaleString("en-IN");
-function go(view){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===view));document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===view));window.scrollTo({top:0,behavior:"smooth"});if(view==="market")renderMaterials();if(view==="impact")renderImpact();}
+function go(view){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===view));document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===view));window.scrollTo({top:0,behavior:"smooth"});if(view==="market")renderMaterials();if(view==="passports")renderMaterialPassports();if(view==="impact")renderImpact();}
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.view)));
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
-function materialCard(m){return `<article class="card"><div class="material-icon">${m.icon}</div><div class="card-top"><span class="tag">${m.category}</span><span class="tag ${m.availability==="Limited"?"limited":""}">${m.availability}</span></div><div><h3>${m.name}</h3><div class="muted small">${m.id} · ${m.location}</div></div><div class="price">${money(m.price)} <span class="muted small">/ ${m.priceUnit}</span></div><div class="pill-row"><span class="pill">${m.quantity.toLocaleString("en-IN")} ${m.unit}</span><span class="pill">${m.condition}</span></div><p class="muted small">${m.description}</p><div class="card-actions"><button class="btn btn-dark btn-small" onclick="askAbout('${m.id}')">Ask Mitra</button><button class="btn btn-outline btn-small" onclick="showDetails('${m.id}')">Details</button>${m.isReal ? `<button class="btn btn-outline btn-small" onclick="enquireAbout('${m.id}')">Enquire</button>` : ""}</div></article>`}
-function renderMaterials(){let q=$("searchInput").value.toLowerCase().trim(),cat=$("categoryFilter").value,cond=$("conditionFilter").value,sort=$("sortFilter").value;let arr=materials.filter(m=>(!q||[m.name,m.category,m.id,m.description].join(" ").toLowerCase().includes(q))&&(!cat||m.category===cat)&&(!cond||m.condition===cond));if(sort==="priceAsc")arr.sort((a,b)=>a.price-b.price);if(sort==="priceDesc")arr.sort((a,b)=>b.price-a.price);if(sort==="quantityDesc")arr.sort((a,b)=>b.quantity-a.quantity);$("materialGrid").innerHTML=arr.length?arr.map(materialCard).join(""):`<div class="empty" style="grid-column:1/-1">No materials match these filters. Try a different search.</div>`;$("resultCount").textContent=`Showing ${arr.length} of ${materials.length} simulated listings.`}
+
+function materialCard(m){
+ const imageUrl = m.image_url || m.imageUrl ||
+  (m.category === "Doors" ? "https://fogmgnizreihfnrdedts.supabase.co/storage/v1/object/sign/material-photos/dark-blue-classic-door-with-molding-old-house-stylish-urban-entrance.jpg?token=eyJraWQiOiJkMTFlMjNhZC1kMDc2LTQ0NjAtYTQ5YS1jMTBhZmMxMGU0OTYiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJtYXRlcmlhbC1waG90b3MvZGFyay1ibHVlLWNsYXNzaWMtZG9vci13aXRoLW1vbGRpbmctb2xkLWhvdXNlLXN0eWxpc2gtdXJiYW4tZW50cmFuY2UuanBnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc5MjcxODYxMywiZXhwIjoxODI0MjU0NjEzfQ.Ngs4Gmq2J1Y6ouWzndxwB4565SNidQGEYd54BcZ8dBaeV3yHXW5l2f1nyJAg1ieR-jJVx_XMyVgIF9a0bsl59g" : "");
+  const fallbackIcon = m.icon || "🏗️";
+
+  return `<article class="card material-card">
+    <div class="material-photo">
+      ${imageUrl
+        ? `<img src="${imageUrl}" alt="${m.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div class="photo-fallback" style="display:none">${fallbackIcon}</div>`
+        : `<div class="photo-fallback">${fallbackIcon}</div>`
+      }
+      <span class="photo-category">${m.category}</span>
+    </div>
+    <div class="card-top">
+      <span class="tag">${m.condition}</span>
+      <span class="tag ${m.availability==="Limited"?"limited":""}">${m.availability || "Available"}</span>
+    </div>
+    <div>
+      <h3>${m.name || m.title || "Material listing"}</h3>
+      <div class="muted small">${m.id} · ${m.location}</div>
+    </div>
+    <div class="price">${money(m.price)} <span class="muted small">/ ${m.priceUnit}</span></div>
+    <div class="pill-row">
+      <span class="pill">${Number(m.quantity || 0).toLocaleString("en-IN")} ${m.unit || ""}</span>
+      <span class="pill">${m.condition}</span>
+    </div>
+    <p class="muted small">${m.description || "Contact the seller for material details and dimensions."}</p>
+    <div class="card-actions">
+      <button class="btn btn-dark btn-small" onclick="askAbout('${m.id}')">Ask Mitra</button>
+      <button class="btn btn-outline btn-small" onclick="showDetails('${m.id}')">Details</button>
+      ${m.isReal ? `<button class="btn btn-outline btn-small" onclick="enquireAbout('${m.id}')">Enquire</button>` : ""}
+    </div>
+  </article>`;
+}
+
+function renderMaterials(){
+  let q = $("searchInput").value.toLowerCase().trim();
+  let cat = $("categoryFilter").value;
+  let cond = $("conditionFilter").value;
+  let sort = $("sortFilter").value;
+
+  let arr = materials.filter(m => {
+    const searchableText = [
+      m.name,
+      m.category,
+      m.id,
+      m.description,
+      m.location,
+      m.condition,
+      m.unit
+    ].join(" ").toLowerCase();
+
+    return (
+      (!q || searchableText.includes(q)) &&
+      (!cat || m.category === cat) &&
+      (!cond || m.condition === cond)
+    );
+  });
+
+  if(sort === "priceAsc") arr.sort((a,b) => a.price-b.price);
+  if(sort === "priceDesc") arr.sort((a,b) => b.price-a.price);
+  if(sort === "quantityDesc") arr.sort((a,b) => b.quantity-a.quantity);
+
+  $("materialGrid").innerHTML = arr.length
+    ? arr.map(materialCard).join("")
+    : `<div class="empty" style="grid-column:1/-1">
+        No materials found. Try another keyword or change your filters.
+       </div>`;
+
+  $("resultCount").textContent =
+    `Showing ${arr.length} of ${materials.length} listings.`;
+}
+
+
+function renderMaterialPassports() {
+  const grid = document.getElementById("passportGrid");
+  if (!grid) return;
+
+  // Only genuine listings loaded from Supabase.
+  const realMaterials = materials.filter(m =>
+    m.isReal === true &&
+    Number(m.quantity) > 0 &&
+    Number(m.price) > 0
+  );
+
+  if (!realMaterials.length) {
+    grid.innerHTML = `
+      <div class="empty" style="grid-column:1/-1">
+        No live material passports are available yet.
+        Passports will appear when genuine seller listings are available.
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = realMaterials.map(m => `
+    <article class="passport-card">
+      <div class="passport-card-head">
+        <div class="passport-kicker">UMB · Material passport</div>
+        <h3>${escapeHTML(String(m.name || m.title || m.category || "Material"))}</h3>
+        <div class="muted small passport-id">
+          Listing ID: ${escapeHTML(String(m.id))}
+        </div>
+      </div>
+
+      <div class="passport-card-body">
+        <div class="passport-facts">
+          <div class="passport-fact">
+            <span>Category</span>
+            <strong>${escapeHTML(String(m.category || "Not specified"))}</strong>
+          </div>
+          <div class="passport-fact">
+            <span>Condition</span>
+            <strong>${escapeHTML(String(m.condition || "Not specified"))}</strong>
+          </div>
+          <div class="passport-fact">
+            <span>Available quantity</span>
+            <strong>${Number(m.quantity).toLocaleString("en-IN")} ${escapeHTML(String(m.unit || "units"))}</strong>
+          </div>
+          <div class="passport-fact">
+            <span>Listed price</span>
+            <strong>${money(m.price)} / ${escapeHTML(String(m.priceUnit || m.unit || "unit"))}</strong>
+          </div>
+          <div class="passport-fact" style="grid-column:1/-1">
+            <span>Seller location</span>
+            <strong>${escapeHTML(String(m.location || "Contact seller"))}</strong>
+          </div>
+        </div>
+
+        <p class="muted small">
+          Listing-linked material record. Confirm dimensions, provenance
+          and condition with the seller before reuse.
+        </p>
+
+        <div class="card-actions">
+          <button class="btn btn-outline btn-small"
+  onclick="openMaterialPassport('${String(m.id).replace(/'/g, "\\'")}')">
+  View Passport
+</button>
+          <button class="btn btn-outline btn-small"
+            onclick="go('market');document.getElementById('searchInput').value='';renderMaterials();">
+            View marketplace
+          </button>
+          <button class="btn btn-outline btn-small"
+            onclick="askAbout('${String(m.id).replace(/'/g, "\\'")}')">
+            Ask Mitra
+          </button>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
+
+function openMaterialPassport(materialId) {
+  const material = materials.find(
+    m => String(m.id) === String(materialId)
+  );
+
+  if (!material || material.isReal !== true) {
+    alert("This material passport is not available.");
+    return;
+  }
+
+  const details = [
+    ["Material", material.name || material.title || material.category || "Material"],
+    ["UMB Listing ID", material.id],
+    ["Category", material.category || "Not specified"],
+    ["Condition", material.condition || "Not specified"],
+    ["Available quantity", `${material.quantity} ${material.unit || "units"}`],
+    ["Listed price", money(material.price)],
+    ["Seller location", material.location || "Contact seller"]
+  ];
+
+  const rows = details.map(([label, value]) =>
+    `<div class="passport-fact">
+      <span>${escapeHTML(String(label))}</span>
+      <strong>${escapeHTML(String(value))}</strong>
+    </div>`
+  ).join("");
+
+  const existing = document.getElementById("passportDetailOverlay");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "passportDetailOverlay";
+  overlay.style.cssText =
+    "position:fixed;inset:0;z-index:9999;background:rgba(15,25,19,.72);" +
+    "display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto;";
+
+  overlay.innerHTML = `
+    <article style="width:min(680px,100%);max-height:90vh;overflow:auto;
+      background:#FFFEFA;color:#242C27;border:1px solid #B39A65;
+      border-radius:18px;padding:clamp(20px,4vw,38px);">
+      <div style="display:flex;justify-content:space-between;gap:16px;align-items:start">
+        <div>
+          <div style="font-size:11px;letter-spacing:2px;color:#244D3B;font-weight:800">
+            URBAN MATERIAL BANK · UMB
+          </div>
+          <h2 style="font-family:Georgia,serif;font-weight:500;font-size:30px;margin:14px 0 6px">
+            Material Passport
+          </h2>
+          <p style="color:#626B64;font-size:13px">Reclaimed material record</p>
+        </div>
+        <button id="closePassportDetail" class="btn btn-outline btn-small"
+          type="button" aria-label="Close passport">Close ✕</button>
+      </div>
+      <div style="height:1px;background:#B39A65;margin:22px 0"></div>
+      <div class="passport-facts">${rows}</div>
+      <p style="font-size:12px;line-height:1.8;color:#626B64">
+        This record reflects the current seller listing. Confirm material
+        dimensions, provenance and condition with the seller before reuse.
+        It is not an independent certification.
+      </p>
+      <div style="margin-top:20px;font-size:10px;letter-spacing:1.5px;color:#244D3B">
+        CIRCULAR MATERIALS · RESPONSIBLE REUSE
+      </div>
+    </article>`;
+
+  document.body.appendChild(overlay);
+
+  document.getElementById("closePassportDetail").onclick = () => overlay.remove();
+
+  overlay.addEventListener("click", event => {
+    if (event.target === overlay) overlay.remove();
+  });
+}
+
 
 async function loadSupabaseListings() {
   const resultCount = $("resultCount");
@@ -654,6 +3021,7 @@ async function loadSupabaseListings() {
       unit: escapeHTML(item.unit || "unit"),
       condition: escapeHTML(item.material_condition || "Good"),
       description: escapeHTML(item.description || ""),
+      image_url: item.photo_url || "",
       isReal: true
     }));
 
@@ -663,9 +3031,34 @@ async function loadSupabaseListings() {
       ...sampleMaterials,
       ...realMaterials
     );
+    
+const validPrices = materials
+  .map(m => Number(m.price))
+  .filter(p => Number.isFinite(p) && p > 0);
 
-    renderMaterials();
+$("homeStats").innerHTML = `
+  <div class="stat">
+    <div class="num">${materials.length}</div>
+    <div class="muted small">Marketplace listings</div>
+  </div>
+  <div class="stat">
+    <div class="num">${new Set(materials.map(m => m.category).filter(Boolean)).size}</div>
+    <div class="muted small">Material categories</div>
+  </div>
+  <div class="stat">
+    <div class="num">${materials.filter(m => m.availability === "Available").length}</div>
+    <div class="muted small">Marked available</div>
+  </div>
+  <div class="stat">
+    <div class="num">${validPrices.length ? "₹" + Math.min(...validPrices).toLocaleString("en-IN") : "—"}</div>
+    <div class="muted small">Lowest listed price</div>
+  </div>
+`;
+
+
+        renderMaterials();
     renderImpact();
+    renderWarehouseCards();
 
     resultCount.textContent =
       `Showing ${materials.length} listings, including ${realMaterials.length} seller listings.`;
@@ -769,10 +3162,10 @@ function mitraReply(raw){const text=raw.toLowerCase();
  if(/hello|hi\b|hey\b/.test(text))return "Hi! I'm UMB Mitra. I can search our sample inventory, compare materials, check listed quantities and help draft a material recovery checklist. What are you building or looking for?";
  if(/rescue|demolition|demolish|renovation|i have materials/.test(text))return "Let's use Material Rescue Mode. Open the Material Rescue tab and enter the material type, approximate quantity, condition and location. I'll help structure a recovery draft; the owner must verify details before any listing is considered real.";
  if(/sustainab|carbon|co2|environment|sdg|waste|umb help/.test(text))return "UMB helps connect reusable construction materials with potential new users, supporting SDG 11 and SDG 12. This demo does not claim verified CO₂ savings. A real impact estimate needs verified reused quantities, material-specific factors, and transport/processing impacts.";
- if(/compare/.test(text)){let found=materials.filter(m=>m.category.toLowerCase().split(" ").some(w=>w.length>3&&text.includes(w))||text.includes(m.name.toLowerCase()));if(found.length<2){const cats=Object.keys(categoryWords).filter(c=>text.includes(c.toLowerCase()));found=materials.filter(m=>cats.includes(m.category))}if(found.length<2)return "Tell me which two materials you want to compare, for example: 'Compare tiles and granite'.";return "Here is a comparison of matching demo listings:\n\n"+found.slice(0,4).map(m=>`${m.name}: ${money(m.price)} per ${m.priceUnit}; ${m.quantity} ${m.unit}; ${m.condition}; ${m.availability}.`).join("\n")+"\n\nNote: prices use different units, so compare only like-for-like materials and units."}
+ if(/compare/.test(text)){let found=materials.filter(m=>m.category.toLowerCase().split(" ").some(w=>w.length>3&&text.includes(w))||text.includes(m.name.toLowerCase()));if(found.length<2){const cats=Object.keys(categoryWords).filter(c=>text.includes(c.toLowerCase()));found=materials.filter(m=>cats.includes(m.category))}if(found.length<2)return "Tell me which two materials you want to compare, for example: 'Compare tiles and granite'.";return "Here is a comparison of matching materials:\n\n"+found.slice(0,4).map(m=>`${m.name}: ${money(m.price)} per ${m.priceUnit}; ${m.quantity} ${m.unit}; ${m.condition}; ${m.availability}.`).join("\n")+"\n\nNote: prices use different units, so compare only like-for-like materials and units."}
  const cat=getCategory(text);const budgetMatch=text.match(/(?:under|below|less than|budget of|max(?:imum)?)\s*₹?\s*([\d,]+)/);const budget=budgetMatch?Number(budgetMatch[1].replace(/,/g,"")):null;const qtyMatch=text.match(/(\d[\d,]*)\s*(pieces?|units?|kg|kilograms?|sq\s*ft|square feet|board-feet)/);const qty=qtyMatch?Number(qtyMatch[1].replace(/,/g,"")):null;
- if(cat||budget!==null){let results=materials.filter(m=>(!cat||m.category===cat)&&(!budget||m.price<=budget));if(!results.length)return `I couldn't find a listing matching ${cat||"that budget"}${budget!==null?" under "+money(budget):""}. Try a different material or budget. I won't invent unavailable stock.`;results.sort((a,b)=>a.price-b.price);return "Here are the matching demo listings:\n\n"+results.slice(0,3).map(m=>formatMaterial(m)+(qty!==null?`\nQuantity check: ${qty>m.quantity?"This listing cannot fulfil the full requested quantity.":"The quantity is numerically sufficient; confirm suitability and dimensions."}`:"")).join("\n\n---\n\n")+"\n\nThese are simulated offers, not live supplier inventory."}
- if(/project|cafe|café|500\s*(sq|square)|planning|plan/.test(text))return "I can help make a preliminary material shortlist. Tell me the material type, approximate area, quantity and budget. For a 500 sq ft café, the actual requirement depends on drawings and design, so I won't invent precise construction quantities. Explore Materials shows the demo options.";
+ if(cat||budget!==null){let results=materials.filter(m=>(!cat||m.category===cat)&&(!budget||m.price<=budget));if(!results.length)return `I couldn't find a listing matching ${cat||"that budget"}${budget!==null?" under "+money(budget):""}. Try a different material or budget. I won't invent unavailable stock.`;results.sort((a,b)=>a.price-b.price);return "Here are the matching materials:\n\n"+results.slice(0,3).map(m=>formatMaterial(m)+(qty!==null?`\nQuantity check: ${qty>m.quantity?"This listing cannot fulfil the full requested quantity.":"The quantity is numerically sufficient; confirm suitability and dimensions."}`:"")).join("\n\n---\n\n")+"\n\nThese are simulated offers, not live supplier inventory."}
+ if(/project|cafe|café|500\s*(sq|square)|planning|plan/.test(text))return "I can help make a preliminary material shortlist. Tell me the material type, approximate area, quantity and budget. For a 500 sq ft café, the actual requirement depends on drawings and design, so I won't invent precise construction quantities. Explore Materials shows the currently listed material options.";
  if(/price|cost|cheap|afford/.test(text))return "I can compare listed demo prices, but I need a material type or category to avoid comparing unlike units. Try 'Find bricks under ₹10 per piece'.";
  if(/available|inventory|materials|listings/.test(text))return "The demo has bricks, teak doors, steel beams, ceramic tiles, wooden window frames, concrete pavers, timber planks and granite slabs. Visit Explore Materials to filter and compare the sample listings.";
  return "I can help search bricks, doors, steel beams, tiles, window frames, pavers, timber and granite. Try 'Find cheap bricks', 'I need teak doors', 'Compare tiles and granite', or 'I have materials from demolition'. I'm a local rule-based demo assistant, so please phrase requests with a material name for the best results.";
@@ -858,6 +3251,7 @@ $("rescueForm").addEventListener("submit", async e => {
   const location = $("rescueLocation").value.trim();
   const context = $("rescueContext").value;
   const notes = $("rescueNotes").value.trim();
+  const photoUrl = $("rescuePhotoUrl").value.trim();
   const output = $("rescueOutput");
 
   if (
@@ -896,7 +3290,8 @@ $("rescueForm").addEventListener("submit", async e => {
         material_condition: condition,
         location: location,
         description:
-          `Project: ${context}. Notes: ${notes || "None provided"}`
+          `Project: ${context}. Notes: ${notes || "None provided"}`,
+          photo_url: photoUrl || null
       });
 
     if (error) throw error;
@@ -943,7 +3338,9 @@ function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;","
 $("searchInput").addEventListener("input",renderMaterials);$("categoryFilter").addEventListener("change",renderMaterials);$("conditionFilter").addEventListener("change",renderMaterials);$("sortFilter").addEventListener("change",renderMaterials);
 [...new Set(materials.map(m=>m.category))].forEach(c=>$("categoryFilter").insertAdjacentHTML("beforeend",`<option>${c}</option>`));
 [...new Set(materials.map(m=>m.condition))].forEach(c=>$("conditionFilter").insertAdjacentHTML("beforeend",`<option>${c}</option>`));
-$("homeStats").innerHTML=`<div class="stat"><div class="num">${materials.length}</div><div class="muted small">Demo listings</div></div><div class="stat"><div class="num">${new Set(materials.map(m=>m.category)).size}</div><div class="muted small">Material categories</div></div><div class="stat"><div class="num">${materials.filter(m=>m.availability==="Available").length}</div><div class="muted small">Marked available</div></div><div class="stat"><div class="num">₹8+</div><div class="muted small">Starting sample price</div></div>`;
+
+$("homeStats").innerHTML=`<div class="stat"><div class="num">${materials.length}</div><div class="muted small">Marketplace listings</div></div><div class="stat"><div class="num">${new Set(materials.map(m=>m.category).filter(Boolean)).size}</div><div class="muted small">Material categories</div></div><div class="stat"><div class="num">${materials.filter(m=>m.availability==="Available").length}</div><div class="muted small">Marked available</div></div><div class="stat"><div class="num">${materials.length ? "₹"+Math.min(...materials.map(m=>Number(m.price)).filter(p=>Number.isFinite(p)&&p>0)).toLocaleString("en-IN") : "—"}</div><div class="muted small">Lowest listed price</div></div>`;
+
 $("featuredGrid").innerHTML=materials.slice(0,3).map(materialCard).join("");
 welcomeMessage();renderMaterials();renderImpact();
 
@@ -970,6 +3367,13 @@ const umbWarehouses = [
     materials: ["Steel", "Granite", "Bricks"]
   },
   {
+  name: "Jayanagar Hub",
+  area: "Jayanagar",
+  lat: 12.9250,
+  lng: 77.5838,
+  materials: ["Bricks", "Steel", "Timber", "Doors", "Tiles"]
+},
+  {
     name: "South Bengaluru Hub",
     area: "Bommanahalli",
     lat: 12.8996,
@@ -980,66 +3384,46 @@ const umbWarehouses = [
 
 let umbMap = null;
 
+
 function renderWarehouseCards() {
   const container = document.getElementById("warehouseCards");
   if (!container) return;
 
-  container.innerHTML = umbWarehouses.map((hub, index) => `
-    <article class="card warehouse-card"
-      data-hub-index="${index}"
-      tabindex="0"
-      role="button"
-      aria-label="View ${hub.name} on map">
-      <div class="hub-icon">📍</div>
-      <h3>${hub.name}</h3>
-      <p class="muted small">${hub.area}</p>
-      <div class="pill-row">
-        ${hub.materials.map(material =>
-          `<span class="pill">${material}</span>`
-        ).join("")}
+  const realListings = materials.filter(item =>
+    item.isReal === true &&
+    Number(item.quantity) > 0 &&
+    Number(item.price) > 0
+  );
+
+  if (!realListings.length) {
+    container.innerHTML = `
+      <div class="panel">
+        <h3>No live seller listings available yet</h3>
+        <p>Verified available listings will appear here after sellers upload materials.</p>
       </div>
-      <button class="btn btn-outline btn-small" type="button">
-        Show on map ↗
-      </button>
+    `;
+    return;
+  }
+
+  container.innerHTML = realListings.map((listing, index) => `
+    <article class="card warehouse-card"
+      data-listing-index="${index}">
+      <div class="hub-icon">📦</div>
+      <h3>${escapeHTML(listing.name || listing.category || "Seller listing")}</h3>
+      <p class="muted small">
+        📍 ${escapeHTML(listing.location || "Location not provided")}
+      </p>
+      <div class="pill-row">
+        <span class="pill">${escapeHTML(listing.category || "Material")}</span>
+        <span class="pill">${escapeHTML(listing.condition || "Condition not specified")}</span>
+      </div>
+      <p><strong>Available:</strong> ${Number(listing.quantity)} ${escapeHTML(listing.unit || "units")}</p>
+      <p><strong>Listed price:</strong> ₹${Number(listing.price).toLocaleString("en-IN")}</p>
+      <p class="muted small">
+        Seller-provided details. Confirm availability and location with the seller.
+      </p>
     </article>
   `).join("");
-
-  container.querySelectorAll(".warehouse-card").forEach(card => {
-    
-const openHub = () => {
-  const hubIndex = Number(card.dataset.hubIndex);
-  const hub = umbWarehouses[hubIndex];
-  if (!hub) return;
-
-  document.querySelectorAll("#warehouseCards .warehouse-card")
-    .forEach(item => {
-      item.classList.remove("selected-hub");
-    });
-
-  card.classList.add("selected-hub");
-
-  showUmbMap();
-
-  if (umbMap) {
-    umbMap.setView([hub.lat, hub.lng], 14);
-
-    const matchingMarker = (window.umbMapMarkers || [])
-      .find(item => item.hub === hub);
-
-    if (matchingMarker) {
-      matchingMarker.marker.openPopup();
-    }
-  }
-};
-
-    card.addEventListener("click", openHub);
-    card.addEventListener("keydown", event => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        openHub();
-      }
-    });
-  });
 }
 
 function showUmbMap() {
@@ -1062,13 +3446,22 @@ function showUmbMap() {
 ).addTo(umbMap);
 
     
+ 
 const markerColours = {
   bricks: "#22966e",
   steel: "#ed9144",
   timber: "#468bd0",
   doors: "#8967c6",
+  windows: "#0891b2",
   tiles: "#d65c78",
-  granite: "#64748b"
+  granite: "#64748b",
+  pavers: "#a16207",
+  stone: "#64748b",
+  graphite: "#374151",
+  concrete: "#78716c",
+  cement: "#a8a29e",
+  roofing: "#0f766e",
+  other: "#64748b"
 };
 
 const markerEmojis = {
@@ -1076,33 +3469,56 @@ const markerEmojis = {
   steel: "🏗️",
   timber: "🪵",
   doors: "🚪",
+  windows: "🪟",
   tiles: "🔷",
-  granite: "🪨"
+  granite: "🪨",
+  pavers: "🧱",
+  stone: "🪨",
+  graphite: "⚫",
+  concrete: "🏢",
+  cement: "🧱",
+  roofing: "🏠",
+  other: "♻️"
 };
+
 
 window.umbMapMarkers = [];
 
-umbWarehouses.forEach(hub => {
-  const firstMaterial = hub.materials[0].toLowerCase();
-  const category = firstMaterial.includes("brick")
-    ? "bricks"
-    : firstMaterial.includes("steel")
-    ? "steel"
-    : firstMaterial.includes("timber")
-    ? "timber"
-    : firstMaterial.includes("door")
-    ? "doors"
-    : firstMaterial.includes("tile")
-    ? "tiles"
-    : firstMaterial.includes("granite")
-    ? "granite"
-    : "bricks";
+
+const realListings = materials.filter(item =>
+  item.isReal === true &&
+  Number(item.quantity) > 0 &&
+  Number(item.price) > 0
+);
+
+realListings.forEach(listing => {
+  const location = String(listing.location || "").trim();
+
+  if (!location) return;
+
+  const category = String(listing.category || "").toLowerCase();
+
+  const markerKey =
+  category.includes("brick") ? "bricks" :
+  category.includes("steel") ? "steel" :
+  category.includes("timber") || category.includes("wood") ? "timber" :
+  category.includes("door") ? "doors" :
+  category.includes("window") ? "windows" :
+  category.includes("tile") ? "tiles" :
+  category.includes("granite") ? "granite" :
+  category.includes("paver") ? "pavers" :
+  category.includes("stone") ? "stone" :
+  category.includes("graphite") ? "graphite" :
+  category.includes("concrete") ? "concrete" :
+  category.includes("cement") ? "cement" :
+  category.includes("roof") ? "roofing" :
+  "other";
 
   const icon = L.divIcon({
     className: "",
     html: `<div class="warehouse-marker"
-      style="background:${markerColours[category]}">
-      <span>${markerEmojis[category]}</span>
+      style="background:${markerColours[markerKey]}">
+      <span>${markerEmojis[markerKey]}</span>
     </div>`,
     iconSize: [38, 38],
     iconAnchor: [19, 38],
@@ -1111,42 +3527,33 @@ umbWarehouses.forEach(hub => {
 
   const popup = `
     <div class="hub-popup">
-      <h3>${hub.name}</h3>
-      <p>📍 ${hub.area}</p>
-      <p><strong>Sample materials</strong></p>
-      ${hub.materials.map(material =>
-        `<span class="popup-tag">${material}</span>`
-      ).join("")}
-      <p style="margin-top:10px;font-size:12px;color:#68766f">
-        Illustrative demo hub · Inventory not verified
-      </p>
+      <h3>${escapeHTML(listing.name || listing.category || "Seller listing")}</h3>
+      <p>📍 ${escapeHTML(location)}</p>
+      <p><strong>Material:</strong> ${escapeHTML(listing.category || "Not specified")}</p>
+      <p><strong>Available quantity:</strong> ${Number(listing.quantity)} ${escapeHTML(listing.unit || "units")}</p>
+      <p><strong>Condition:</strong> ${escapeHTML(listing.condition || "Not specified")}</p>
+      <p><strong>Listed price:</strong> ₹${Number(listing.price).toLocaleString("en-IN")}</p>
+      <p class="muted small">Location must be confirmed with the seller.</p>
     </div>
   `;
+
+  // Use a known hub only for an exact location match.
+  const hub = umbWarehouses.find(h =>
+    h.area.trim().toLowerCase() === location.toLowerCase() ||
+    h.name.trim().toLowerCase() === location.toLowerCase()
+  );
+
+  // Don't place a pin at invented coordinates.
+  if (!hub) return;
 
   const marker = L.marker([hub.lat, hub.lng], { icon })
     .addTo(umbMap)
     .bindPopup(popup);
-    marker.on("click", () => {
-  document.querySelectorAll("#warehouseCards .warehouse-card")
-    .forEach(card => {
-      card.classList.remove("selected-hub");
-    });
 
-  const matchingCard = document.querySelector(
-    `#warehouseCards .warehouse-card[data-hub-index="${umbWarehouses.indexOf(hub)}"]`
-  );
-
-  if (matchingCard) {
-    matchingCard.classList.add("selected-hub");
-    matchingCard.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest"
-    });
-  }
+  window.umbMapMarkers.push({ marker, listing });
 });
 
-    window.umbMapMarkers.push({ marker, hub });
-});
+
 
   }
 
@@ -1172,50 +3579,7 @@ document.querySelectorAll("[data-go='map']").forEach(button => {
   });
 });
 
-const mapFilterContainer =
-  document.getElementById("mapMaterialFilters");
 
-if (mapFilterContainer &&
-    !mapFilterContainer.dataset.connected) {
-
-  mapFilterContainer.dataset.connected = "true";
-
-  mapFilterContainer.addEventListener("click", event => {
-    const button = event.target.closest("[data-material]");
-    if (!button) return;
-
-    mapFilterContainer.querySelectorAll(".map-filter")
-      .forEach(filter => filter.classList.remove("active"));
-
-    button.classList.add("active");
-
-    const selectedMaterial = button.dataset.material.toLowerCase();
-
-    (window.umbMapMarkers || []).forEach(({ marker, hub }) => {
-      const matches = selectedMaterial === "all" ||
-        hub.materials.some(material =>
-          material.toLowerCase() === selectedMaterial
-        );
-
-      if (matches && !umbMap.hasLayer(marker)) {
-        marker.addTo(umbMap);
-      } else if (!matches && umbMap.hasLayer(marker)) {
-        umbMap.removeLayer(marker);
-      }
-    });
-
-    document.querySelectorAll("#warehouseCards .warehouse-card")
-      .forEach(card => {
-        const hub = umbWarehouses[Number(card.dataset.hubIndex)];
-        const matches = selectedMaterial === "all" ||
-          (hub && hub.materials.some(material =>
-            material.toLowerCase() === selectedMaterial
-          ));
-
-        card.style.display = matches ? "" : "none";
-      });
-  });
-}
 
 /* URBAN MATERIAL BANK — DEMO MATCHING SYSTEM */
 
@@ -1228,7 +3592,7 @@ if (matchingForm && matchingResults &&
   matchingForm.dataset.connected = "true";
 
   // Illustrative prices per demo unit (not live market prices).
-  const demoPrices = {
+  const newMaterialReferencePrices = {
     bricks: 12,
     steel: 65,
     timber: 1800,
@@ -1240,24 +3604,45 @@ if (matchingForm && matchingResults &&
     stone: 50
   };
 
-  // Generate repeatable sample inventory for listed hub materials.
-  function getDemoStock(hub, hubIndex, material) {
-    const materialIndex = hub.materials.findIndex(
-      item => item.toLowerCase() === material.toLowerCase()
-    );
+ // Match only genuine seller listings loaded from Supabase.
+function getRealStock(materialType) {
+  const normalize = value =>
+    String(value || "").trim().toLowerCase();
 
-    if (materialIndex === -1) return null;
+  const aliases = {
+    bricks: ["bricks", "brick"],
+    steel: ["steel", "steel beams", "steel beam"],
+    timber: ["timber", "wood"],
+    doors: ["doors", "door"],
+    windows: ["windows", "window frames", "window"],
+    tiles: ["tiles", "tile"],
+    granite: ["granite", "stone"],
+    pavers: ["pavers", "concrete pavers"],
+    stone: ["stone", "granite"],
+    "mixed materials": ["mixed materials"]
+  };
 
-    return {
-      quantity: 350 + (
-        (hubIndex * 271 + materialIndex * 173) % 1800
-      ),
-      price: demoPrices[material.toLowerCase()] || 100,
-      condition: 1 + (
-        (hubIndex + materialIndex) % 3
-      )
-    };
-  }
+  const acceptedTypes = aliases[normalize(materialType)] ||
+    [normalize(materialType)];
+
+  return materials
+    .filter(item =>
+      item.isReal === true &&
+      acceptedTypes.includes(normalize(item.category)) &&
+      Number(item.quantity) > 0 &&
+      Number(item.price) > 0
+    )
+    .map(item => ({
+      listing: item,
+      quantity: Number(item.quantity),
+      price: Number(item.price),
+      condition: ({
+        excellent: 3,
+        good: 2,
+        fair: 1
+      })[normalize(item.condition)] || 0
+    }));
+}
 
   function distanceKm(pointA, pointB) {
     const radians = degrees => degrees * Math.PI / 180;
@@ -1312,76 +3697,117 @@ if (matchingForm && matchingResults &&
       return;
     }
 
-    const candidates = umbWarehouses
-      .map((hub, hubIndex) => {
-        const stock = getDemoStock(hub, hubIndex, material);
-        if (!stock) return null;
+    const candidates = getRealStock(material)
+  .map(stock => {
+    const listing = stock.listing;
+    const quantity = stock.quantity;
+    const price = stock.price;
+    const materialKey = String(listing.category || "")
+  .trim()
+  .toLowerCase();
 
-        const distance = distanceKm(destination, hub);
-        const totalCost = stock.quantity >= requiredQuantity
-          ? requiredQuantity * stock.price
-          : stock.quantity * stock.price;
+const referenceKeyMap = {
+  bricks: "bricks",
+  steel: "steel",
+  timber: "timber",
+  doors: "doors",
+  windows: "windows",
+  tiles: "tiles",
+  stone: "granite",
+  pavers: "pavers",
+  "mixed materials": null
+};
 
-        const quantityRatio = Math.min(
-          stock.quantity / requiredQuantity, 1
-        );
+const referenceKey = referenceKeyMap[materialKey];
+const referencePrice = referenceKey
+  ? newMaterialReferencePrices[referenceKey]
+  : undefined;
 
-        const budgetRatio = maxBudget > 0
-          ? Math.min(totalCost / maxBudget, 1)
-          : (totalCost === 0 ? 0 : 1);
+const newMaterialCost =
+  referencePrice !== undefined
+    ? requiredQuantity * referencePrice
+    : null;
 
-        
-const distanceScore =
-  Math.max(0, 1 - distance / 30) * 25;
+const potentialSavings =
+  newMaterialCost !== null
+    ? newMaterialCost - requiredQuantity * price
+    : null;
 
-const quantityScore =
-  quantityRatio * 30;
-
-const priceScore =
-  maxBudget > 0
-    ? Math.max(0, 1 - totalCost / maxBudget) * 25
-    : (totalCost === 0 ? 25 : 0);
-
-const conditionScore =
-  (stock.condition / 3) * 20;
-
-const stockPenalty =
-  stock.quantity < requiredQuantity ? 15 : 0;
-
-const conditionPenalty =
-  stock.condition < minCondition ? 20 : 0;
-
-        return {
-          hub,
-          stock,
-          distance,
-          totalCost,
-          quantityRatio,
-          score: Math.max(0, Math.min(100, Math.round(
-  distanceScore + quantityScore +
-  priceScore + conditionScore -
-  stockPenalty - conditionPenalty
-)))
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => b.score - a.score);
-
-    // Apply the user's minimum condition and total budget.
-    let suitable = candidates.filter(item =>
-      item.stock.condition >= minCondition &&
-      item.totalCost <= maxBudget
+const savingsPercent =
+  newMaterialCost !== null && newMaterialCost > 0
+    ? (potentialSavings / newMaterialCost) * 100
+    : null;
+    // Only use a warehouse as a destination reference.
+    // Do not claim the seller is located at that warehouse.
+    const sellerLocation = String(listing.location || "");
+    const destinationHub = umbWarehouses.find(hub =>
+      hub.area.toLowerCase() === sellerLocation.toLowerCase() ||
+      hub.name.toLowerCase() === sellerLocation.toLowerCase()
     );
 
+    const distance = destinationHub
+      ? distanceKm(destination, destinationHub)
+      : null;
+
+    const totalCost = requiredQuantity * price;
+    const quantityRatio = Math.min(
+      quantity / requiredQuantity, 1
+    );
+
+    const priceScore = maxBudget > 0
+      ? Math.max(0, 1 - totalCost / maxBudget) * 25
+      : 0;
+
+    const quantityScore = quantityRatio * 30;
+    const conditionScore = stock.condition > 0
+      ? (stock.condition / 3) * 20
+      : 0;
+
+    const distanceScore = distance !== null
+      ? Math.max(0, 1 - distance / 30) * 25
+      : 0;
+
+    return {
+      hub: {
+        name: listing.name || listing.category || "Seller listing",
+        area: sellerLocation || "Location not provided"
+      },
+      listing,
+      stock,
+      distance,
+      totalCost,
+      newMaterialCost,
+potentialSavings,
+savingsPercent,
+      quantityRatio,
+      score: Math.round(
+        distanceScore + quantityScore +
+        priceScore + conditionScore
+      )
+    };
+  })
+  .sort((a, b) => b.score - a.score);
+    // Apply the user's minimum condition and total budget.
+    let suitable = candidates.filter(item =>
+  item.stock.condition > 0 &&
+  item.stock.condition >= minCondition &&
+  item.stock.quantity >= requiredQuantity &&
+  item.totalCost <= maxBudget
+);
     
 const hasSuitableMatches = suitable.length > 0;
 
 if (candidates.length === 0) {
   matchingResults.innerHTML = `
     <div class="panel" style="margin-top:18px">
-      <h3>No demo stock found</h3>
-      <p>No sample inventory was found for this material.
-      Try another material type.</p>
+      <h3>No matching seller listings found</h3>
+      <p>
+        No available seller listings were found for this material type
+        with a valid quantity and unit price.
+      </p>
+      <p>
+        Try another material type or check back when sellers add new stock.
+      </p>
     </div>
   `;
   return;
@@ -1390,7 +3816,13 @@ if (candidates.length === 0) {
 // If strict filters find no results, show the three
 // highest-ranked alternatives instead.
 if (!hasSuitableMatches) {
-  suitable = candidates.slice(0, 3);
+  suitable = candidates
+    .filter(item =>
+      item.stock.condition > 0 &&
+      item.stock.condition >= minCondition &&
+      item.totalCost <= maxBudget
+    )
+    .slice(0, 3);
 }
 
     matchingResults.innerHTML = `
@@ -1400,13 +3832,14 @@ if (!hasSuitableMatches) {
 <h2>${hasSuitableMatches
   ? "Recommended Matches"
   : "Closest Available Alternatives"}</h2>
-<p>${suitable.length} demo option(s) shown for
+<p>${suitable.length} matching option(s) shown for
 ${material} near ${projectArea}.</p>
 ${!hasSuitableMatches ? `
   <div class="notice">
-    No option met every budget and condition filter.
-    These are the closest ranked alternatives; check their
-    prices and condition before choosing.
+    No listing met all your selected quantity, budget and condition
+    requirements. These alternatives may have insufficient stock
+    or may not meet every filter. Review each listing carefully
+    and contact the seller before choosing.
   </div>
 ` : ""}
 
@@ -1416,102 +3849,129 @@ ${!hasSuitableMatches ? `
 <div class="panel" style="margin-bottom:18px;border-left:4px solid #14b8a6">
   <h3>✨ Smart Recommendation Insight</h3>
   <p>
-    The top-ranked option is
-    <strong>${suitable[0].hub.name}</strong>,
-    approximately ${suitable[0].distance.toFixed(1)} km from your project.
+    The top-ranked seller listing is
+    <strong>${escapeHTML(suitable[0].listing.name || suitable[0].listing.category || "Material listing")}</strong>.
   </p>
   <p>
     It has a match score of <strong>${suitable[0].score}/100</strong>
-    and an estimated total cost of
+    and an estimated material cost of
     <strong>₹${suitable[0].totalCost.toLocaleString("en-IN")}</strong>.
   </p>
+  <p>
+    <strong>Seller location:</strong>
+    ${escapeHTML(suitable[0].listing.location || "Not provided")}
+  </p>
+  <p>
+    <strong>Distance:</strong>
+    ${suitable[0].distance !== null
+      ? suitable[0].distance.toFixed(1) + " km (approx.)"
+      : "Cannot be calculated reliably from the listing location"}
+  </p>
   <p class="muted small">
-    Ranked using estimated distance, quantity fit, price and condition.
-    Confirm inventory and suitability with the supplier.
+    Recommendations use seller-listed quantities, prices and condition.
+    The score is an estimate, not a guarantee. Confirm availability,
+    transport costs and suitability directly with the seller.
   </p>
 </div>
 
 
       <p class="notice">
-        Demo estimates only. Quantities, prices, condition and
-        distances are simulated; confirm all details with a supplier.
-      </p>
+  These are illustrative matching results based on estimated inventory,
+  prices, condition and distance. Confirm availability, pricing and
+  suitability directly with the supplier before making a decision.
+</p>
 
       <div class="grid">
-        ${suitable.map((item, index) => {
-          const enough = item.stock.quantity >= requiredQuantity;
-          const conditionLabel = [
-            "Unknown",
-            "Fair",
-            "Good",
-            "Excellent"
-          ][item.stock.condition];
+  ${suitable.map((item, index) => {
+    const enough = item.stock.quantity >= requiredQuantity;
 
-          return `
-            <article class="panel">
-              <p>
-<strong>${
-  index === 0
-    ? "⭐ Best overall match"
-    : item.totalCost === Math.min(...suitable.map(m => m.totalCost))
-      ? "💰 Best price"
-      : item.distance === Math.min(...suitable.map(m => m.distance))
-        ? "📍 Closest hub"
-        : "Option " + (index + 1)
-}</strong>
-</p>
-              <h3>${item.hub.name}</h3>
-              <p>📍 ${item.hub.area}</p>
-              <p><strong>Distance:</strong> ${item.distance.toFixed(1)} km (approx.)</p>
-              <p><strong>Demo stock:</strong> ${item.stock.quantity} units</p>
-              <p><strong>Your requirement:</strong> ${requiredQuantity} units</p>
-              <p><strong>Quantity fit:</strong> ${
-                enough ? "Enough for full requirement" :
-                "Partial match — more stock needed"
-              }</p>
-              <p><strong>Demo unit price:</strong> ₹${item.stock.price.toLocaleString("en-IN")}</p>
-              <p><strong>Estimated cost:</strong> ₹${item.totalCost.toLocaleString("en-IN")}</p>
-              <p><strong>Condition:</strong> ${conditionLabel}</p>
-              <p><strong>Match score:</strong> ${item.score}/100</p>
-              
-<p><strong>Why this match?</strong></p>
-<ul>
-  <li>${
-    item.stock.quantity >= requiredQuantity
-      ? "Enough stock for your full requirement"
-      : "Partial stock — additional material may be needed"
-  }</li>
-  <li>${
-    item.stock.condition >= minCondition
-      ? "Meets your minimum condition requirement"
-      : "Condition is below your selected minimum"
-  }</li>
-  <li>${
-    item.totalCost <= maxBudget
-      ? "Within your estimated budget"
-      : "Exceeds your budget — consider increasing it"
-  }</li>
-  <li>${
-    item.distance <= 5
-      ? "Nearby hub"
-      : item.distance <= 15
-        ? "Moderate distance from your project"
-        : "Farther from your project location"
-  }</li>
-</ul>
+    const conditionLabel = [
+      "Unknown",
+      "Fair",
+      "Good",
+      "Excellent"
+    ][item.stock.condition] || "Not specified";
 
-              <p class="notice">Illustrative inventory, not verified stock.</p>
-              
-<button
-  type="button"
-  class="btn btn-primary"
-  data-view-match-hub="${umbWarehouses.indexOf(item.hub)}">
-  View Hub on Map
-</button>
+    const listing = item.listing;
+    const unit = listing.unit || "unit";
 
-            </article>
-          `;
-        }).join("")}
+    return `
+      <article class="panel">
+        <p>
+          <strong>${
+            index === 0
+              ? "⭐ Best overall match"
+              : item.totalCost === Math.min(...suitable.map(m => m.totalCost))
+                ? "💰 Best price"
+                : "Option " + (index + 1)
+          }</strong>
+        </p>
+
+        <h3>${escapeHTML(listing.name || listing.category || "Material listing")}</h3>
+        <p><strong>Material type:</strong> ${escapeHTML(listing.category || "Not specified")}</p>
+        <p>📍 ${escapeHTML(listing.location || "Location not provided")}</p>
+        ${
+  (() => {
+    const sellerLocation = String(listing.location || "").trim().toLowerCase();
+    const hubIndex = umbWarehouses.findIndex(hub =>
+      String(hub.area || "").trim().toLowerCase() === sellerLocation ||
+      String(hub.name || "").trim().toLowerCase() === sellerLocation
+    );
+
+    return hubIndex !== -1
+      ? `<button type="button" class="btn btn-secondary" data-view-match-hub="${hubIndex}">
+           📍 Show on Map
+         </button>`
+      : `<p class="muted small">Map location unavailable for this seller.</p>`;
+  })()
+}
+
+        <p><strong>Listed quantity:</strong> ${item.stock.quantity} ${escapeHTML(unit)}</p>
+        <p><strong>Your requirement:</strong> ${requiredQuantity} ${escapeHTML(unit)}</p>
+
+        <p><strong>Quantity fit:</strong> ${
+          enough
+            ? "Enough listed quantity for your requirement"
+            : "Partial match — more stock may be needed"
+        }</p>
+
+        <p><strong>Listed unit price:</strong> ₹${item.stock.price.toLocaleString("en-IN")} per ${escapeHTML(unit)}</p>
+        <p><strong>Estimated material cost:</strong> ₹${item.totalCost.toLocaleString("en-IN")}</p>
+        
+        <p><strong>Condition:</strong> ${conditionLabel}</p>
+        <p><strong>Match score:</strong> ${item.score}/100</p>
+
+        <p><strong>Why this match?</strong></p>
+        <ul>
+          <li>${
+            enough
+              ? "Listed quantity covers your requirement"
+              : "Listed quantity is less than your requirement"
+          }</li>
+          <li>${
+            item.stock.condition > 0 && item.stock.condition >= minCondition
+              ? "Meets your selected minimum condition"
+              : "Condition is unknown or below your selected minimum"
+          }</li>
+          <li>${
+            item.totalCost <= maxBudget
+              ? "Within your estimated material budget"
+              : "Exceeds your material budget"
+          }</li>
+          <li>${
+            item.distance !== null
+              ? "Approximate distance: " + item.distance.toFixed(1) + " km"
+              : "Distance cannot be verified from the listing location"
+          }</li>
+        </ul>
+
+        <p class="notice">
+          Seller listing loaded from the marketplace. Confirm availability,
+          condition, dimensions and delivery costs directly with the seller.
+        </p>
+      </article>
+    `;
+  }).join("")}
       </div>
         `;
   });
@@ -1660,6 +4120,52 @@ document.getElementById("loadSellerEnquiries").addEventListener("click", async (
   }
 });
 
+</script>
+
+
+<script>
+  (() => {
+    const themeToggle = document.getElementById("themeToggle");
+    if (!themeToggle) return;
+
+    function applyTheme(isMidnight) {
+      document.documentElement.dataset.theme =
+        isMidnight ? "midnight" : "light";
+
+      themeToggle.textContent =
+        isMidnight ? "☀ Light mode" : "☾ Midnight";
+
+      themeToggle.setAttribute("aria-pressed", String(isMidnight));
+      themeToggle.title = isMidnight
+        ? "Switch to light mode"
+        : "Switch to midnight mode";
+    }
+
+    let savedTheme = "light";
+    try {
+      savedTheme = localStorage.getItem("umb-theme") || "light";
+    } catch (error) {
+      // Keep the theme toggle working if storage is unavailable.
+    }
+
+    applyTheme(savedTheme === "midnight");
+
+    themeToggle.addEventListener("click", () => {
+      const isMidnight =
+        document.documentElement.dataset.theme !== "midnight";
+
+      applyTheme(isMidnight);
+
+      try {
+        localStorage.setItem(
+          "umb-theme",
+          isMidnight ? "midnight" : "light"
+        );
+      } catch (error) {
+        // Theme still works for the current page.
+      }
+    });
+  })();
 </script>
 
 </body>
